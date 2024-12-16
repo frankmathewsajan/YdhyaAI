@@ -27,4 +27,4 @@ migrations/
 *.pkl
 *.tmp
 /skin_c_detection/process/data/
-/skin_c_detection
+/skin_c_detection/

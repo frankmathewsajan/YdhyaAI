@@ -56,7 +56,7 @@ ROOT_URLCONF = 'YdhyaAI.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [BASE_DIR / 'skin_c_detection/templates']
         ,
         'APP_DIRS': True,
         'OPTIONS': {
