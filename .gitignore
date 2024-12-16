@@ -1,0 +1,29 @@
+# Django project files
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.env
+venv/
+*.sqlite3
+db.sqlite3
+*.log
+
+# User-specific Django files
+*.log.*
+local_settings.py
+**/local_settings.py
+
+# Node packages and cache
+node_modules/
+npm-debug.log
+bower_components/
+yarn.lock
+
+# Database migrations
+migrations/
+
+# Django-specific
+*.pkl
+*.tmp
+/skin_c_detection/process/data/
