@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "skin_c_detection.apps.SkinCDetectionConfig",
     "arogya_ai.apps.ArogyaAiConfig"
 ]
 
@@ -56,7 +55,7 @@ ROOT_URLCONF = 'YdhyaAI.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'skin_c_detection/templates']
+        'DIRS': [BASE_DIR / 'arogya_ai/templates']
         ,
         'APP_DIRS': True,
         'OPTIONS': {

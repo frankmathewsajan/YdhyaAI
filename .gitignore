@@ -26,4 +26,5 @@ migrations/
 # Django-specific
 *.pkl
 *.tmp
+/skin_c_detection
 /skin_c_detection/process/data/
