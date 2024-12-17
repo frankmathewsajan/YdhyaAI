@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arogya AI Interface</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+            font-family: Arial, sans-serif;
+            color: #333;
+            transition: background 0.5s ease;
+        }
+
+        .glass-container {
+            width: 90%;
+            max-width: 600px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        #chatbox {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .user-message {
+            text-align: right;
+            background-color: rgba(173, 216, 230, 0.8);
+            color: #333;
+        }
+
+        .bot-message {
+            text-align: left;
+            background-color: rgba(144, 238, 144, 0.8);
+            color: #333;
+        }
+
+        .input-group {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            margin-right: 10px;
+            outline: none;
+        }
+
+        #sendButton {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        #sendButton:hover {
+            background-color: #0056b3;
+        }
+
+        h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="glass-container">
+    <h3>Arogya AI</h3>
+    <div id="chatbox" class="mb-3">
+        <!-- Chat messages will appear here -->
+    </div>
+    <div class="input-group">
+        {% csrf_token %}
+        <input type="text" id="userInput" placeholder="Type your message here">
+        <button id="sendButton">Send</button>
+    </div>
+</div>
+
+<script>
+    const chatbox = document.getElementById('chatbox');
+    const userInput = document.getElementById('userInput');
+    const sendButton = document.getElementById('sendButton');
+
+    // Dynamic background color based on time of day
+    const hour = new Date().getHours();
+    if (hour >= 6 && hour < 12) {
+        document.body.style.background = "linear-gradient(135deg, #f3eac2, #f9d976)"; // Morning
+    } else if (hour >= 12 && hour < 18) {
+        document.body.style.background = "linear-gradient(135deg, #fbc2eb, #a18cd1)"; // Afternoon
+    } else {
+        document.body.style.background = "linear-gradient(135deg, #283048, #859398)"; // Evening/Night
+    }
+
+    sendButton.addEventListener('click', sendMessage);
+
+    function appendMessage(message, isUser) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', isUser ? 'user-message' : 'bot-message');
+        messageDiv.innerHTML = message; // Parse response as HTML
+        chatbox.appendChild(messageDiv);
+        chatbox.scrollTop = chatbox.scrollHeight; // Auto-scroll to the bottom
+    }
+
+    function sendMessage() {
+        const message = userInput.value.trim();
+        if (!message) return;
+
+        // Display user message
+        appendMessage(message, true);
+        userInput.value = '';
+
+        // Send message to the backend
+        fetch('chat/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken() // For Django CSRF protection
+            },
+            body: JSON.stringify({ message })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const parsedResponse = parseReadmeToHTML(data.response); // Parse response to HTML
+            appendMessage(parsedResponse, false);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            appendMessage('<i>Error: Unable to connect to the server.</i>', false);
+        });
+    }
+
+    function getCSRFToken() {
+       return document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    }
+
+    // Function to parse readme-like response to HTML
+    function parseReadmeToHTML(text) {
+        return text
+            .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+            .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+            .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+            .replace(/\*\*(.*)\*\*/gim, '<b>$1</b>')
+            .replace(/\*(.*)\*/gim, '<i>$1</i>')
+            .replace(/`([^`]+)`/gim, '<code>$1</code>')
+            .replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2" target="_blank">$1</a>')
+            .replace(/\n/gim, '<br>');
+    }
+</script>
+</body>
+</html>
