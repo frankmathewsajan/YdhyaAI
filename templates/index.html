@@ -194,7 +194,7 @@
 <!-- Search Section -->
 <div class="search-section">
     <h1>Arogya AI</h1>
-    <button class="search-bar" onclick="navigateToAI()">Use Arogya AI</button>
+    <button class="search-bar" onclick="location.href='{% url 'ai' %}'">Use Arogya AI</button>
 </div>
 
 <!-- Card Grid -->
@@ -231,10 +231,5 @@
     <p>Access exclusive features for SafeFit device users. Track your health seamlessly and enjoy premium insights!</p>
 </div>
 
-<script>
-    function navigateToAI() {
-        alert("Navigate to Arogya AI Page");
-    }
-</script>
 </body>
 </html>

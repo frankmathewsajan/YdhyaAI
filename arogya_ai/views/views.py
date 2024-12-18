@@ -18,8 +18,13 @@ def telemedicine(request):
     return render(request, 'arogya_ai/features/telemedicine.html')
 
 
+def ai(request):
+    return render(request, 'arogya_ai/ai.html')
+
+
 def booking(request):
     return render(request, 'arogya_ai/features/booking.html')
+
 
 def payment(request):
     return render(request, 'arogya_ai/features/payment.html')
@@ -39,6 +44,7 @@ def search(request):
 
 def reminder(request):
     return render(request, 'arogya_ai/features/reminder.html')
+
 
 def detection(request):
     return render(request, 'arogya_ai/features/detection.html')
