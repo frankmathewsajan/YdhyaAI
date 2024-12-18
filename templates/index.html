@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/35c881c056.js" crossorigin="anonymous"></script>
     <title>Ydhya Health Dashboard</title>
     <style>
         /* General Reset */
@@ -35,7 +36,7 @@
         .branding {
             font-size: 24px;
             font-weight: bold;
-            color: #6a8ffe;
+            color: #FC6DAB;
         }
 
         .profile {
@@ -46,7 +47,7 @@
         }
 
         .profile-btn {
-            background-color: #6a8ffe;
+            background-color: #FC6DAB;
             border: none;
             color: white;
             padding: 10px 15px;
@@ -83,7 +84,7 @@
         }
 
         .dropdown a:hover {
-            background-color: #6a8ffe;
+            background-color: #FC6DAB;
         }
 
         .profile:hover .dropdown {
@@ -99,7 +100,7 @@
         .search-section h1 {
             font-size: 32px;
             margin-bottom: 15px;
-            color: #6a8ffe;
+            color: #FC6DAB;
         }
 
         .search-bar {
@@ -109,13 +110,13 @@
             border: none;
             font-size: 18px;
             color: white;
-            background-color: #6a8ffe;
+            background-color: #FC6DAB;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
         .search-bar:hover {
-            background-color: #567be1;
+            background-color: #f1b0b7;
         }
 
         .card-grid {
@@ -137,7 +138,7 @@
         }
 
         .card:hover {
-            background-color: #6a8ffe;
+            background-color: #FC6DAB;
             color: black;
         }
 
@@ -153,7 +154,7 @@
 
         .safefit-card {
             margin-top: 30px;
-            background-color: #6a8ffe;
+            background-color: #FC6DAB;
             color: black;
             padding: 30px;
             border-radius: 15px;
@@ -163,7 +164,7 @@
         }
 
         .safefit-card:hover {
-            background-color: #567be1;
+            background-color: #f1b0b7;
         }
 
         .safefit-card h2 {
@@ -182,7 +183,7 @@
 <header>
     <div class="branding">Ydhya</div>
     <div class="profile">
-        <button class="profile-btn">👤</button>
+        <span>{{ user.username }}</span><i class="fa-solid fa-user fa-xl"></i>
         <div class="dropdown">
             <a href="#">Settings</a>
             <a href="#">Past Records</a>
