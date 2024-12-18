@@ -1,0 +1,316 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medication Reminder</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #2e2e2e; /* Semi-black background */
+            font-family: Arial, sans-serif;
+            color: #fff;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: auto;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 30px;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: #333;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-container input,
+        .form-container select,
+        .form-container button {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-container input[type="text"],
+        .form-container input[type="number"] {
+            font-size: 1.5rem;
+        }
+
+        .session-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .session-container label {
+            font-size: 1.2rem;
+        }
+
+        .session-container input {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        .time-selector {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .time-selector select {
+            font-size: 1rem;
+            width: 120px;
+            margin-left: 10px;
+        }
+
+        .upcoming-reminders-btn {
+            background-color: #444;
+            color: #fff;
+            border: 1px solid #666;
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 20px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .upcoming-reminders-btn:hover {
+            background-color: #666;
+        }
+
+        /* Upcoming Reminders Styles */
+        .upcoming-reminders-popup {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #444;
+            color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 900px;
+            display: none;
+            flex-direction: column;
+        }
+
+        .upcoming-reminders-popup .close-btn {
+            align-self: flex-end;
+            background-color: #f44336;
+            border: none;
+            padding: 10px;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .reminder-card {
+            background-color: #555;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .reminder-card .delete-btn {
+            background-color: #f44336;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 8px;
+        }
+
+        /* Hover effect */
+        .reminder-card:hover {
+            background-color: #666;
+        }
+
+        /* Input Focus and Button Hover */
+        input:focus, select:focus, button:hover {
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Medication Reminder System</h1>
+        
+        <div class="form-container">
+            <label for="medication-name">Medication Name:</label>
+            <input type="text" id="medication-name" placeholder="Enter medication name">
+
+            <div class="session-container">
+                <div>
+                    <input type="checkbox" id="morning" onclick="toggleTimeSelector('morning')">
+                    <label for="morning">Morning</label>
+                    <div class="time-selector" id="morning-time">
+                        <select disabled id="morning-time-select">
+                            <option value="">Select Time</option>
+                            <option value="7:00 AM">7:00 AM</option>
+                            <option value="8:00 AM">8:00 AM</option>
+                            <option value="9:00 AM">9:00 AM</option>
+                            <option value="10:00 AM">10:00 AM</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <input type="checkbox" id="noon" onclick="toggleTimeSelector('noon')">
+                    <label for="noon">Noon</label>
+                    <div class="time-selector" id="noon-time">
+                        <select disabled id="noon-time-select">
+                            <option value="">Select Time</option>
+                            <option value="1:00 PM">1:00 PM</option>
+                            <option value="2:00 PM">2:00 PM</option>
+                            <option value="3:00 PM">3:00 PM</option>
+                            <option value="4:00 PM">4:00 PM</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <input type="checkbox" id="night" onclick="toggleTimeSelector('night')">
+                    <label for="night">Night</label>
+                    <div class="time-selector" id="night-time">
+                        <select disabled id="night-time-select">
+                            <option value="">Select Time</option>
+                            <option value="8:00 PM">8:00 PM</option>
+                            <option value="9:00 PM">9:00 PM</option>
+                            <option value="10:00 PM">10:00 PM</option>
+                            <option value="11:00 PM">11:00 PM</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <label for="course-period">Course Period (in Days):</label>
+            <input type="number" id="course-period" placeholder="Enter course period in days">
+
+            <button onclick="saveReminder()">Save Reminder</button>
+        </div>
+
+        <button class="upcoming-reminders-btn" onclick="showUpcomingReminders()">Upcoming Reminders</button>
+        
+        <div class="upcoming-reminders-popup" id="reminders-popup">
+            <button class="close-btn" onclick="closePopup()">×</button>
+            <div id="upcoming-reminders-list"></div>
+        </div>
+    </div>
+
+    <script>
+        let reminders = [];
+
+        function toggleTimeSelector(session) {
+            const isChecked = document.getElementById(session).checked;
+            document.getElementById(`${session}-time`).querySelector('select').disabled = !isChecked;
+        }
+
+        function saveReminder() {
+            const medicationName = document.getElementById('medication-name').value;
+            const coursePeriod = document.getElementById('course-period').value;
+            
+            const morningTime = document.getElementById('morning-time-select').value;
+            const noonTime = document.getElementById('noon-time-select').value;
+            const nightTime = document.getElementById('night-time-select').value;
+
+            if (!medicationName || !coursePeriod) {
+                alert('Please fill in all the fields');
+                return;
+            }
+
+            let reminder = {
+                medicationName,
+                coursePeriod,
+                sessions: []
+            };
+
+            if (morningTime) reminder.sessions.push({ time: morningTime, session: 'Morning' });
+            if (noonTime) reminder.sessions.push({ time: noonTime, session: 'Noon' });
+            if (nightTime) reminder.sessions.push({ time: nightTime, session: 'Night' });
+
+            reminders.push(reminder);
+            displayUpcomingReminders();
+
+            // Reset the form fields after saving the reminder
+            document.getElementById('medication-name').value = '';
+            document.getElementById('course-period').value = '';
+            document.getElementById('morning').checked = false;
+            document.getElementById('noon').checked = false;
+            document.getElementById('night').checked = false;
+            document.getElementById('morning-time-select').disabled = true;
+            document.getElementById('noon-time-select').disabled = true;
+            document.getElementById('night-time-select').disabled = true;
+        }
+
+        function showUpcomingReminders() {
+            const popup = document.getElementById('reminders-popup');
+            popup.style.display = 'flex';
+        }
+
+        function closePopup() {
+            const popup = document.getElementById('reminders-popup');
+            popup.style.display = 'none';
+        }
+
+        function displayUpcomingReminders() {
+            const list = document.getElementById('upcoming-reminders-list');
+            list.innerHTML = '';
+            reminders.forEach((reminder, index) => {
+                const reminderCard = document.createElement('div');
+                reminderCard.className = 'reminder-card';
+
+                reminderCard.innerHTML = ` 
+                    <div>
+                        <strong>${reminder.medicationName}</strong><br>
+                        ${reminder.sessions.map(s => `${s.session}: ${s.time}`).join('<br>')}
+                    </div>
+                    <button class="delete-btn" onclick="deleteReminder(${index})">Delete</button>
+                `;
+
+                list.appendChild(reminderCard);
+            });
+        }
+
+        function deleteReminder(index) {
+            reminders.splice(index, 1);
+            displayUpcomingReminders();
+        }
+    </script>
+
+</body>
+</html>

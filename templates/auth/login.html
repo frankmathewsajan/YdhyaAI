@@ -1,0 +1,31 @@
+{% extends 'auth/layout.html' %}
+{% block title %}YdhyaAI - Sign In{% endblock %}
+{% block form_info %}
+    <h1>Welcome Back!</h1>
+    <p>Please log in to access your account.</p>
+    {% if message %}
+        <span style="color: red">{{ message }}</span>
+    {% endif %}
+
+    <form action="{% url 'login' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="Username" required><br>
+        <input type="password" name="password" placeholder="Password" required><br>
+
+        <div class="checkbox-container">
+            <input type="checkbox" style="width: auto!important;" required>
+            <label>I accept the <span class="guidelines">guidelines
+                <div class="guidelines-popup">
+                    <p>1. Respect others.</p>
+                    <p>2. Maintain confidentiality.</p>
+                    <p>3. Use appropriate language.</p>
+                    <p>4. Follow ethical practices.</p>
+                </div>
+            </span>.</label>
+        </div>
+
+        <button type="submit" class="btn">Log In</button>
+    </form>
+
+    <p class="signup-link">New to YdhyaAI? <a href="{% url 'register' %}" style="text-decoration: none;color: white">Sign up here</a></p>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'auth/layout.html' %}
+{% load static %}
+{% block title %}YdhyaAI - Sign Up{% endblock %}
+{% block form_info %}
+    <h1>Create an Account</h1>
+    <p>Join YdhyaAI today and start learning with us!</p>
+    {% if message %}
+        <span style="color: red">{{ message }}</span>
+    {% endif %}
+
+    <form action="{% url 'register' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="user_name" placeholder="First Name" required aria-label="Enter your first name"><br>
+        <input type="text" name="username" placeholder="Username" required aria-label="Enter your username"><br>
+        <input type="password" name="password" placeholder="Password" required aria-label="Enter your password"><br>
+        <input type="password" name="confirmation" placeholder="Confirm Password" required
+               aria-label="Confirm your password"><br>
+
+        <!-- Checkbox with guidelines popup -->
+        <div class="checkbox-container">
+            <input type="checkbox" style="width: auto !important;" required aria-label="Accept guidelines">
+            <label>I accept the <span class="guidelines">guidelines
+                <div class="guidelines-popup">
+                    <p>1. Respect others.</p>
+                    <p>2. Maintain confidentiality.</p>
+                    <p>3. Use appropriate language.</p>
+                    <p>4. Follow ethical practices.</p>
+                </div>
+            </span>.</label>
+        </div>
+
+        <button type="submit" class="btn">Sign Up</button>
+    </form>
+
+    <p class="login-link">Already have an account? <a href="{% url 'login' %}" style="color: white">Log in here</a></p>
+{% endblock %}

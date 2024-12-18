@@ -1,14 +1,54 @@
 import json
-import requests
 
+import requests
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
 
 # Create your views here.
 def index(request):
-    return render(request, 'arogya_ai/index.html')
+    if request.user.is_authenticated:
+        return render(request, 'index.html')
+    return render(request, 'welcome.html')
+
+
+def telemedicine(request):
+    return render(request, 'arogya_ai/features/telemedicine.html')
+
+
+def booking(request):
+    return render(request, 'arogya_ai/features/booking.html')
+
+def payment(request):
+    return render(request, 'arogya_ai/features/payment.html')
+
+
+def ocr(request):
+    return render(request, 'arogya_ai/features/ocr.html')
+
+
+def advice(request):
+    return render(request, 'arogya_ai/features/advice.html')
+
+
+def search(request):
+    return render(request, 'arogya_ai/features/search.html')
+
+
+def reminder(request):
+    return render(request, 'arogya_ai/features/reminder.html')
+
+def detection(request):
+    return render(request, 'arogya_ai/features/detection.html')
+
+
+@login_required
+def setup(request):
+    if request.method == 'POST':
+        redirect('index')
+    return render(request, 'user/setup.html')
 
 
 @csrf_exempt
@@ -60,6 +100,7 @@ Tests, procedures, or referrals.
 Treatment Plan:
 Specific recommendations, including medications and lifestyle changes.
 """
+
 
 def get_response(length, prompt=""):
     url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent"

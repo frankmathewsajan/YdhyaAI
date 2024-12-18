@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="zxx">
+<head>
+    <!-- Required meta tags-->
+    <meta charset="utf-8">
+    <!-- Title-->
+    <title>Ydhya - AI</title>
+    <!-- Description-->
+    <meta name="description" content="Ydhya">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Web fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i&amp;display=swap"
+          rel="stylesheet">
+    <!-- CSS vendors-->
+    <link rel="stylesheet" href="{% static 'welcome/css/bootstrap-custom.css' %}">
+    <link rel="stylesheet" href="{% static 'welcome/css/ionicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'welcome/css/tiny-slider.css' %}">
+    <link rel="stylesheet" href="{% static 'welcome/css/lity.min.css' %}">
+    <link rel="stylesheet" href="{% static 'welcome/css/simplebar.min.css' %}">
+    <link rel="stylesheet" href="{% static 'welcome/css/jquery.mb.YTPlayer.min.css' %}">
+    <!-- Main CSS-->
+    <link rel="stylesheet" href="{% static 'welcome/css/main.css' %}">
+    <!-- CSS Color scheme-->
+    <link id="color-scheme" rel="stylesheet" href="{% static 'welcome/css/colors/main-darkgreen.css' %}">
+    <!-- Custom CSS (Add your custom CSS styles to this file)-->
+    <link rel="stylesheet" href="{% static 'welcome/css/main.css' %}">
+    <!-- removeIf(customizerDist)-->
+    <link rel="stylesheet" href="{% static 'welcome/css/main_c.css' %}">
+    <!-- endremoveIf(customizerDist)-->
+</head>
+<body class="theme-dark">
+<!-- Preloader-->
+<div class="preloader">
+    <div class="preloader-block">
+        <div class="preloader-icon"><span class="loading-dot loading-dot-1"></span><span
+                class="loading-dot loading-dot-2"></span><span class="loading-dot loading-dot-3"></span></div>
+    </div>
+</div>
+<div id="overlay-effect"></div>
+<!-- Navbar-->
+<nav class="navbar-expand-md navbar fixed-top" id="navbar">
+    <a class="navbar-brand" data-scroll="" href="#home-area">
+        <!-- Navbar Logo-->
+        <img class="img-fluid" src=" {% static 'welcome/img/YdhyaAIlogo.png' %}" alt="Logo">
+    </a>
+    <span class="navbar-menu ml-auto" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+          role="button"><span class="btn-line"></span></span>
+    <div class="collapse navbar-collapse order-1 order-lg-0" id="navbarSupportedContent">
+        <!-- Navbar menu-->
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+            <li class="nav-item"><a class="nav-link" href="#portfolio">Features</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact">Contact Us</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+        </ul>
+    </div>
+</nav>
+<!-- Home-->
+<section class="home-area element-cover-bg" id="home" style="background-image:url({% static 'welcome/img/home.jpg' %})">
+    <div class="container h-100">
+        <div class="row h-100 align-items-center justify-content-center">
+            <div class="col-12 col-lg-8 home-content text-center">
+                <h1 class="home-name">Ydhya <span>AI</span></h1>
+                <h4 class="cd-headline clip home-headline"><span class="cd-words-wrapper single-headline"><b
+                        class="is-visible">Revanth Modalavalasa</b><b>Frank Mathew Sajan</b><b>Abhiram Jasthi</b><b>Anju Singh</b>
+                </h4>
+            </div>
+        </div>
+    </div>
+    <div class="fixed-wrapper">
+        <!-- Social media icons-->
+        <div class="fixed-block block-right">
+            <ul class="list-unstyled social-icons">
+                <li><a href="#0"><i class="icon ion-logo-twitter"></i></a></li>
+                <li><a href="#0"><i class="icon ion-logo-facebook"></i></a></li>
+                <li><a href="#0"><i class="icon ion-logo-linkedin"></i></a></li>
+                <li><a href="#0"><i class="icon ion-logo-github"></i></a></li>
+                <li><a href="#0"><i class="icon ion-logo-instagram"></i></a></li>
+            </ul>
+        </div>
+    </div>
+</section>
+<!-- About lightbox-->
+<div class="lightbox-wrapper" id="about" data-simplebar>
+    <div class="container">
+        <div class="lightbox-close">
+            <div class="close-btn" data-modal-close=""><span class="btn-line"></span></div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="lightbox-content">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="section-heading page-heading">
+                                <h2 class="section-title">About Us</h2>
+                                <div class="animated-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Info section-->
+                    <div class="info-section single-section">
+                        <div class="row align-items-center">
+                            <!-- Content part-->
+                            <div class="col-18 col-lg-13 info-content">
+                                <div class="content-block">
+                                    <h2 class="content-subtitle">Who are we?</h2>
+                                    <h6 class="content-title">Team Ydhya</h6>
+                                    <div class="content-description">
+                                        <p>At Ydhya, we are a team of passionate innovators, designers, and
+                                            problem-solvers dedicated to developing technology that seamlessly
+                                            integrates into everyday life. With a focus on wearable solutions and smart
+                                            systems, we combine precision engineering, cutting-edge hardware, and sleek
+                                            design to create products that are as elegant as they are functional.
+                                            <br>
+                                            We believe in simplifying complexity. Whether it’s through innovative
+                                            wearables, smart devices, or intuitive technology, our mission is to deliver
+                                            tools that enhance user experience while maintaining comfort, style, and
+                                            reliability.
+                                            <br>
+                                            At the heart of Ydhya lies our commitment to innovation, quality, and
+                                            user-centric design, ensuring that every product we create meets the highest
+                                            standards of excellence and durability.
+                                            <br><br>
+                                            <b><i>We are Ydhya—where technology meets lifestyle.</i></b>
+                                        </p>
+                                        <hr>
+                                        <br>
+                                        <p>At Ydhya, we are committed to crafting innovative solutions that seamlessly
+                                            blend technology with everyday life. Driven by creativity, precision, and
+                                            user-centric design, our mission is to simplify and enhance how people
+                                            interact with the tools they rely on daily.
+                                            <br>
+                                            We specialize in cutting-edge wearable technology, focusing on elegance,
+                                            comfort, and functionality. With a strong emphasis on blending aesthetics
+                                            and advanced hardware, our products deliver top-tier performance while
+                                            maintaining an effortlessly sleek appearance. Our team comprises passionate
+                                            designers, engineers, and innovators who strive to push boundaries and
+                                            deliver unparalleled user experiences.
+                                            <br>
+                                            At Ydhya, we believe that technology should be invisible but indispensable,
+                                            perfectly integrated into your lifestyle. Every product we design is a
+                                            testament to this philosophy—smart, subtle, and impactful.
+                                            <br>
+                                            Our values are simple yet powerful:
+                                            <br>
+                                            Innovation: Continuously advancing and reimagining what’s possible.
+                                            Quality: Delivering superior craftsmanship with every detail.
+                                            Simplicity: Creating intuitive, minimalist solutions that make life easier.
+                                            Reliability: Ensuring durability, precision, and long-term usability.
+                                            Join us on our journey as we shape the future of wearable
+                                            technology—designed for today, inspired by tomorrow.<br><br>
+                                            <b><i>Ydhya: Where Functionality Meets Elegance</i></b>
+                                        </p>
+                                        <br>
+                                        <hr>
+                                        <br>
+                                        <p>
+                                        <h2><b>Why Choose Us!</b></h2>
+                                        Innovative Design
+                                        We focus on crafting cutting-edge solutions that are both stylish and
+                                        functional.
+                                        <br>
+                                        High-Quality Materials
+                                        Our products are built using premium materials ensuring durability and long-term
+                                        performance.
+                                        <br>
+                                        Seamless User Experience
+                                        Designed with the user in mind, our products offer intuitive functionality and
+                                        ease of use.
+                                        <br>
+                                        Attention to Detail
+                                        Every component is carefully designed and integrated, providing a sleek,
+                                        seamless finish.
+                                        <br>
+                                        Customer-Centric Approach
+                                        We prioritize customer satisfaction by delivering excellence in both product
+                                        quality and support.
+                                        <br>
+                                        Affordable Solutions
+                                        Quality innovation doesn't have to be expensive — we deliver value without
+                                        compromising on quality.</p><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Features Section -->
+<!-- Contact lightbox-->
+<div class="lightbox-wrapper" id="contact" data-simplebar>
+    <div class="container">
+        <div class="lightbox-close">
+            <div class="close-btn" data-modal-close=""><span class="btn-line"></span></div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="lightbox-content">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="section-heading page-heading">
+                                <h2 class="section-title">Get in Touch</h2>
+                                <div class="animated-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Contact section-->
+                    <div class="contact-section single-section">
+                        <div class="row">
+                            <!-- Contact form-->
+                            <div class="col-12 col-lg-7">
+                                <form class="contact-form" id="contact-form">
+                                    <h4 class="content-title">Connect</h4>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6 form-group"><input class="form-control"
+                                                                                       id="contact-name" type="text"
+                                                                                       name="name" placeholder="Name"
+                                                                                       required=""></div>
+                                        <div class="col-12 col-md-6 form-group"><input class="form-control"
+                                                                                       id="contact-email" type="email"
+                                                                                       name="email" placeholder="Email"
+                                                                                       required=""></div>
+                                        <div class="col-12 form-group"><input class="form-control" id="contact-subject"
+                                                                              type="text" name="subject"
+                                                                              placeholder="Subject" required=""></div>
+                                        <div class="col-12 form-group form-message"><textarea class="form-control"
+                                                                                              id="contact-message"
+                                                                                              name="message"
+                                                                                              placeholder="Message"
+                                                                                              rows="5"
+                                                                                              required=""></textarea>
+                                        </div>
+                                        <div class="col-12 form-submit">
+                                            <button class="btn button-main button-scheme" id="contact-submit"
+                                                    type="submit">Send Message
+                                            </button>
+                                            <p class="contact-feedback"></p>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- Contact info-->
+                            <div class="col-12 col-lg-5">
+                                <div class="contact-info">
+                                    <h4 class="content-title">Contact Info</h4>
+                                    <p class="info-description">Always available for any queries, advices, or
+                                        updates.
+                                    </p>
+                                    <ul class="list-unstyled list-info">
+                                        <li>
+                                            <div class="media align-items-center">
+                                          <span class="info-icon"><i
+                                                  class="icon ion-md-map"></i></span>
+                                                <div class="media-body info-details">
+                                                    <h6 class="info-type">Location</h6>
+                                                    <span class="info-value">VIT-AP University</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="media align-items-center">
+                                          <span class="info-icon"><i
+                                                  class="icon ion-md-send"></i></span>
+                                                <div class="media-body info-details">
+                                                    <h6 class="info-type">Email Us</h6>
+                                                    <span class="info-value"><a
+                                                            href="mailto:emma@example.com">ydhya.ai@gmail.com</a></span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Scripts-->
+<script src="{%  static 'welcome/js/jquery.min.js'%}"></script>
+<script src="{%  static 'welcome/js/bootstrap.bundle.min.js'%}"></script>
+<script src="{%  static 'welcome/js/imagesloaded.pkgd.min.js'%}"></script>
+<script src="{%  static 'welcome/js/isotope.pkgd.min.js'%}"></script>
+<script src="{%  static 'welcome/js/animatedModal.js'%}"></script>
+<script src="{%  static 'welcome/js/tiny-slider.js'%}"></script>
+<script src="{%  static 'welcome/js/lity.min.js'%}"></script>
+<script src="{%  static 'welcome/js/simplebar.min.js'%}"></script>
+<script src="{%  static 'welcome/js/jquery.mb.YTPlayer.min.js'%}"></script>
+<script src="{%  static 'welcome/js/main.js'%}"></script>
+<!-- Custom JS (Add your welcome/custom JS scripts to this file)-->
+<script src="{%  static 'welcome/js/custom.js'%}"></script>
+</body>
+</html>

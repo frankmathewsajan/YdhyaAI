@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ydhya Health Dashboard</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #1f1f1f;
+            border-radius: 8px;
+        }
+
+        .branding {
+            font-size: 24px;
+            font-weight: bold;
+            color: #6a8ffe;
+        }
+
+        .profile {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-btn {
+            background-color: #6a8ffe;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background-color: #1f1f1f;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            display: none;
+            text-align: left;
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+            border-bottom: 1px solid #333;
+            white-space: nowrap;
+        }
+
+        .dropdown a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown a:hover {
+            background-color: #6a8ffe;
+        }
+
+        .profile:hover .dropdown {
+            display: block;
+        }
+
+        .search-section {
+            margin: 30px 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .search-section h1 {
+            font-size: 32px;
+            margin-bottom: 15px;
+            color: #6a8ffe;
+        }
+
+        .search-bar {
+            width: 60%;
+            padding: 20px;
+            border-radius: 30px;
+            border: none;
+            font-size: 18px;
+            color: white;
+            background-color: #6a8ffe;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-bar:hover {
+            background-color: #567be1;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .card {
+            background-color: #1f1f1f;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            background-color: #6a8ffe;
+            color: black;
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .safefit-card {
+            margin-top: 30px;
+            background-color: #6a8ffe;
+            color: black;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            max-width: 1200px;
+        }
+
+        .safefit-card:hover {
+            background-color: #567be1;
+        }
+
+        .safefit-card h2 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .safefit-card p {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<header>
+    <div class="branding">Ydhya</div>
+    <div class="profile">
+        <button class="profile-btn">👤</button>
+        <div class="dropdown">
+            <a href="#">Settings</a>
+            <a href="#">Past Records</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </div>
+</header>
+
+<!-- Search Section -->
+<div class="search-section">
+    <h1>Arogya AI</h1>
+    <button class="search-bar" onclick="navigateToAI()">Use Arogya AI</button>
+</div>
+
+<!-- Card Grid -->
+<div class="card-grid">
+    <div class="card" onclick="location.href='{% url 'telemedicine' %}'">
+        <h2>Telemedicine</h2>
+        <p>Consult doctors online in real-time.</p>
+    </div>
+    <div class="card" onclick="location.href='{% url 'reminder' %}'">
+        <h2>Medication Reminder</h2>
+        <p>Stay on track with timely reminders for your medicines.</p>
+    </div>
+    <div class="card" onclick="location.href='{% url 'search' %}'">
+        <h2>Medicine Search</h2>
+        <p>Get detailed drug information, dosage, and side effects.</p>
+    </div>
+    <div class="card" onclick="location.href='{% url 'ocr' %}'">
+        <h2>Prescription Recognition</h2>
+        <p>Convert prescriptions into structured medicine lists.</p>
+    </div>
+    <div class="card" onclick="location.href='{% url 'detection' %}'">
+        <h2>Disease Detection</h2>
+        <p>Analyze symptoms and images to predict diseases.</p>
+    </div>
+    <div class="card" onclick="location.href='{% url 'advice' %}'">
+        <h2>Lifestyle Advice</h2>
+        <p>Get personalized lifestyle recommendations.</p>
+    </div>
+</div>
+
+<!-- SafeFit Section -->
+<div class="safefit-card" onclick="alert('Navigate to SafeFit')">
+    <h2>SafeFit User?</h2>
+    <p>Access exclusive features for SafeFit device users. Track your health seamlessly and enjoy premium insights!</p>
+</div>
+
+<script>
+    function navigateToAI() {
+        alert("Navigate to Arogya AI Page");
+    }
+</script>
+</body>
+</html>

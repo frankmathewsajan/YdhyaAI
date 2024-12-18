@@ -1,0 +1,218 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        /* Root colors and styling */
+        :root {
+            --primary-color: #FC6DAB;
+            --accent-color: #FC6DAB;
+            --background-dark: #000; /* Dark background */
+            --text-color-light: #e0e0e0; /* Light text for dark theme */
+            --text-color-dark: #333; /* Dark text for light elements */
+        }
+
+        /* Basic styling */
+        body, html {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: var(--background-dark); /* Dark background */
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            color: var(--text-color-light); /* Dark theme text */
+        }
+
+        /* Container for signup box */
+        .container {
+            background-color: #222; /* Slightly lighter than background */
+            padding: 2rem; /* Reduce padding */
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            max-width: 400px; /* Reduced width */
+            width: 80%; /* Adjust the width to fit the reduced size */
+            text-align: center;
+            animation: fadeIn 1.2s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            animation: slideDown 1s ease;
+        }
+
+        p {
+            color: var(--text-color-light); /* Light text for descriptions */
+            margin-bottom: 1.5rem;
+        }
+
+        /* Input styling */
+        input {
+            width: 90%;
+            padding: 0.8rem;
+            margin: 0.7rem 0;
+            border: 1px solid #555;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: box-shadow 0.3s ease;
+            background-color: #333; /* Dark input background */
+            color: var(--text-color-light); /* Light text for input */
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(252, 109, 171, 0.5);
+        }
+
+        /* Button styling */
+        .btn {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(252, 109, 171, 0.5);
+        }
+
+        /* Checkbox container */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color-light); /* Light text for checkbox */
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .checkbox-container input {
+            margin-right: 0.5rem;
+            transform: scale(1.2);
+        }
+
+        /* Guidelines popup */
+        .guidelines {
+            color: var(--accent-color);
+            cursor: pointer;
+            position: relative;
+            margin-left: 0.3rem;
+        }
+
+        .guidelines-popup {
+            display: none;
+            position: absolute;
+            top: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #222;
+            padding: 1rem;
+            border: 1px solid #555;
+            border-radius: 5px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            height: 150px;
+            overflow-y: scroll;
+            text-align: left;
+            font-size: 0.85rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .guidelines.active .guidelines-popup {
+            display: block;
+        }
+
+        /* Link to login page */
+        .login-link {
+            margin-top: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .login-link a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .login-link a:hover {
+            color: #ff9dc2;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Floating sign-up container */
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+    </style>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+<canvas id="canvas3d" style="width: 100%; height: 100vh;"></canvas>
+<script async src="https://unpkg.com/es-module-shims@1.0.1/dist/es-module-shims.js"></script>
+<script type="importmap">
+    {
+        "imports": {
+            "@splinetool/runtime": "https://unpkg.com/@splinetool/runtime@1.9.32/build/runtime.js"
+        }
+    }
+</script>
+<script type="module" src="{% static 'arogya_ai/js/app.js' %}"></script>
+
+<div class="container">
+    {% block form_info %}{% endblock %}
+</div>
+
+<script>
+    // Toggle guidelines popup
+    document.querySelector('.guidelines').addEventListener('mouseover', (e) => {
+        e.preventDefault();
+        e.target.classList.add('active');
+        setTimeout(
+            () => {
+                e.target.classList.remove('active');
+            }, 3000
+        )
+    });
+
+</script>
+</body>
+</html>

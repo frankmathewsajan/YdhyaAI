@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Consultation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEJX3Qus7pH7J+8bBse4A+J6L9gAlYfmGfZz5F9+F2+0t+f0RZv5wBKi6hd4r" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .doctor-card {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .doctor-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .doctor-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            margin-right: 20px;
+            object-fit: cover;
+        }
+
+        .doctor-info {
+            flex-grow: 1;
+        }
+
+        .doctor-info h4 {
+            color: #5a2a8c;
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        .doctor-info p {
+            color: #555;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .btn-book {
+            background-color: #5a2a8c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-book:hover {
+            background-color: #4b1a6b;
+        }
+
+        .container {
+            margin: 50px auto;
+            max-width: 1200px;
+        }
+
+        h2 {
+            color: #5a2a8c;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Select a Doctor for Consultation</h2>
+    <div class="doctor-list">
+        <!-- Example Doctor Cards -->
+        <div class="doctor-card">
+            <img src="https://static.vecteezy.com/system/resources/previews/023/570/349/non_2x/portrait-of-girl-doctor-illustration-ai-generative-free-photo.jpg"
+                 alt="Dr. Ananya Kumar" class="doctor-img">
+            <div class="doctor-info">
+                <h4>Dr. Ananya Kumar</h4>
+                <p>Cardiologist, Apollo Hospital, Bangalore</p>
+                <p>Specialization: Cardiology</p>
+            </div>
+            <a href="{% url 'booking' %}" class="btn-book">Book Appointment</a>
+        </div>
+
+        <div class="doctor-card">
+            <img src="https://via.placeholder.com/150" alt="Dr. Ravi Shankar" class="doctor-img">
+            <div class="doctor-info">
+                <h4>Dr. Ravi Shankar</h4>
+                <p>Orthopedic Surgeon, AIIMS, New Delhi</p>
+                <p>Specialization: Orthopedics</p>
+            </div>
+            <a href="{% url 'booking' %}" class="btn-book">Book Appointment</a>
+        </div>
+
+        <div class="doctor-card">
+            <img src="https://via.placeholder.com/150" alt="Dr. Priya Soni" class="doctor-img">
+            <div class="doctor-info">
+                <h4>Dr. Priya Soni</h4>
+                <p>Pediatrician, Fortis Hospital, Mumbai</p>
+                <p>Specialization: Pediatrics</p>
+            </div>
+            <a href="{% url 'booking' %}" class="btn-book">Book Appointment</a>
+        </div>
+
+        <!-- Repeat for 23 doctors -->
+        <div class="doctor-card">
+            <img src="https://via.placeholder.com/150" alt="Dr. Arvind Verma" class="doctor-img">
+            <div class="doctor-info">
+                <h4>Dr. Arvind Verma</h4>
+                <p>Neurologist, Max Super Speciality Hospital, Delhi</p>
+                <p>Specialization: Neurology</p>
+            </div>
+            <a href="{% url 'booking' %}" class="btn-book">Book Appointment</a>
+        </div>
+
+        <div class="doctor-card">
+            <img src="https://via.placeholder.com/150" alt="Dr. Neha Joshi" class="doctor-img">
+            <div class="doctor-info">
+                <h4>Dr. Neha Joshi</h4>
+                <p>Gynecologist, Kokilaben Dhirubhai Ambani Hospital, Mumbai</p>
+                <p>Specialization: Gynecology</p>
+            </div>
+            <a href="{% url 'booking' %}" class="btn-book">Book Appointment</a>
+        </div>
+
+        <!-- Add more doctor cards similarly -->
+        <!-- Total 23 doctors -->
+    </div>
+</div>
+</body>
+</html>

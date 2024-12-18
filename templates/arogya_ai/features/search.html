@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .search-box {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 70%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .search-box button {
+            padding: 10px 15px;
+            margin-left: 10px;
+            font-size: 16px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .search-box button:hover {
+            background-color: #0056b3;
+        }
+
+        .results {
+            margin-top: 20px;
+        }
+
+        .result {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #f9f9f9;
+        }
+
+        .result h3 {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Medicine Search</h1>
+    <div class="search-box">
+        <input type="text" id="search" placeholder="Enter medicine name...">
+        <button onclick="searchMedicine()">Search</button>
+    </div>
+    <div class="results" id="results"></div>
+</div>
+
+<script>
+    async function searchMedicine() {
+        const query = document.getElementById('search').value;
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = "<p>Loading...</p>";
+
+        if (!query.trim()) {
+            resultsDiv.innerHTML = "<p>Please enter a medicine name.</p>";
+            return;
+        }
+
+        try {
+            // Fetch data from FDA API (Drug Label)
+            const fdaResponse = await fetch(`https://api.fda.gov/drug/label.json?search=generic_name:${query}&limit=1`);
+            const fdaData = await fdaResponse.json();
+
+            // Fetch data from RxNorm API (Properties)
+            const rxResponse = await fetch(`https://rxnav.nlm.nih.gov/REST/rxcui.json?name=${query}`);
+            const rxData = await rxResponse.json();
+
+            if (!fdaData.results || fdaData.results.length === 0) {
+                resultsDiv.innerHTML = "<p>No data found for this medicine.</p>";
+                return;
+            }
+
+            const label = fdaData.results[0];
+            const rxInfo = rxData.idGroup.rxnormId ? rxData.idGroup.rxnormId[0] : null;
+
+            // Create results
+            let html = "";
+            html += `<div class="result">
+          <h3>${label.openfda.brand_name?.[0] || query}</h3>
+          <p><strong>Generic Name:</strong> ${label.openfda.generic_name?.[0] || 'N/A'}</p>
+          <p><strong>Purpose:</strong> ${label.purpose?.join(' ') || 'Information not available.'}</p>
+          <p><strong>Indications:</strong> ${label.indications_and_usage?.join(' ') || 'Information not available.'}</p>
+          <p><strong>Side Effects:</strong> ${label.warnings_and_cautions?.join(' ') || 'Information not available.'}</p>
+          <p><strong>Dosage:</strong> ${label.dosage_and_administration?.join(' ') || 'Information not available.'}</p>
+        </div>`;
+
+            if (rxInfo) {
+                html += `<div class="result">
+            <p><strong>RxNorm Code:</strong> ${rxInfo}</p>
+            <p>Additional details available via RxNorm API.</p>
+          </div>`;
+            }
+
+            resultsDiv.innerHTML = html;
+        } catch (error) {
+            console.error(error);
+            resultsDiv.innerHTML = "<p>An error occurred while fetching data. Please try again later.</p>";
+        }
+    }
+</script>
+</body>
+</html>
