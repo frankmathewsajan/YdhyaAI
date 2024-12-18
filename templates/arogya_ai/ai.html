@@ -137,7 +137,7 @@
         userInput.value = '';
 
         // Send message to the backend
-        fetch('chat/', {
+        fetch(`{% url 'chat' %}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

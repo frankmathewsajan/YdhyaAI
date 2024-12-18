@@ -44,17 +44,10 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            border-bottom: 10pc;
         }
 
         .profile-btn {
-            background-color: #FC6DAB;
-            border: none;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 18px;
             cursor: pointer;
         }
 
@@ -85,10 +78,6 @@
 
         .dropdown a:hover {
             background-color: #FC6DAB;
-        }
-
-        .profile:hover .dropdown {
-            display: block;
         }
 
         .search-section {
@@ -183,7 +172,9 @@
 <header>
     <div class="branding">Ydhya</div>
     <div class="profile">
-        <span>{{ user.username }}</span><i class="fa-solid fa-user fa-xl"></i>
+        <div class="profile-btn">
+            <span>{{ user.username }}</span>  <i class="fa-solid fa-user fa-xl"></i>
+        </div>
         <div class="dropdown">
             <a href="#">Settings</a>
             <a href="#">Past Records</a>
@@ -231,6 +222,20 @@
     <h2>SafeFit User?</h2>
     <p>Access exclusive features for SafeFit device users. Track your health seamlessly and enjoy premium insights!</p>
 </div>
+<script>
+    const profileBtn = document.querySelector('.profile-btn');
+    const dropdown = document.querySelector('.dropdown');
+    // Toggle dropdown on button click
+    profileBtn.addEventListener('click', () => {
+        dropdown.classList.toggle('active');
+    });
 
+    // Close dropdown if clicking outside
+    document.addEventListener('click', (event) => {
+        if (!profileBtn.contains(event.target) && !dropdown.contains(event.target)) {
+            dropdown.classList.remove('active');
+        }
+    });
+</script>
 </body>
 </html>
