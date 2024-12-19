@@ -1,4 +1,5 @@
 import json
+import os
 
 import requests
 from django.contrib.auth.decorators import login_required
@@ -58,6 +59,33 @@ def setup(request):
 
 
 @csrf_exempt
+def get_generic_name(request):
+    if request.method == "POST":
+        try:
+            body = json.loads(request.body)
+            query = body.get("query", "").lower()
+            # Fetch response using external API
+            medicine_db = get_response(50,
+                                       f"{query}, fix the spelling of the medicine, what is its generic name  in FDA "
+                                       f"and RxNorm, give response in json format like, key = 'query', "
+                                       f"value = 'generic name'",
+                                       t='null')
+            print(medicine_db)
+            # Extract the generic name from the API response
+            medicine_db = json.loads(medicine_db.replace("```json\n", "").replace("```", "")).trim()
+            print(0, medicine_db)
+            generic_name = medicine_db.get(query, "Unknown")
+            print(generic_name)
+            return JsonResponse({"generic_name": generic_name})
+
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)  # Catch any other unexpected errors
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+
+@csrf_exempt
 def chat(request):
     if request.method == "POST":
         try:
@@ -108,17 +136,17 @@ Specific recommendations, including medications and lifestyle changes.
 """
 
 
-def get_response(length, prompt=""):
+def get_response(length, prompt="", t='arogya_ai'):
     url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent"
-    api_key = "AIzaSyAarh80ROw6uiSTAzqd7joDjaexdloTork"
-
+    api_key = os.getenv("API_KEY")
+    text = f"{start_text}\n {prompt} \n{end_text}" if t == 'arogya_ai' else f"{prompt}"
     # Define the payload
     payload = {
         "contents": [
             {
                 "parts": [
                     {
-                        "text": f"{start_text}\n {prompt} \n{end_text}"
+                        "text": text
                     }
                 ]
             }

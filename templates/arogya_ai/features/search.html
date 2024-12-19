@@ -83,49 +83,74 @@
 </div>
 
 <script>
+    async function getGenericName(query) {
+        try {
+            const response = await fetch('/generic', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({query: query})
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('Generic name:', data.generic_name);
+            return data.generic_name;
+        } catch (error) {
+            console.error('Error:', error);
+            return query;
+        }
+    }
+
+
     async function searchMedicine() {
-        const query = document.getElementById('search').value;
+        let query = document.getElementById('search').value.trim().toLowerCase();
         const resultsDiv = document.getElementById('results');
         resultsDiv.innerHTML = "<p>Loading...</p>";
 
-        if (!query.trim()) {
+        if (!query) {
             resultsDiv.innerHTML = "<p>Please enter a medicine name.</p>";
             return;
         }
 
+
         try {
             // Fetch data from FDA API (Drug Label)
-            const fdaResponse = await fetch(`https://api.fda.gov/drug/label.json?search=generic_name:${query}&limit=1`);
+            const fdaResponse = await fetch(`https://api.fda.gov/drug/label.json?search=openfda.generic_name:"${query}"&limit=1`);
             const fdaData = await fdaResponse.json();
 
             // Fetch data from RxNorm API (Properties)
             const rxResponse = await fetch(`https://rxnav.nlm.nih.gov/REST/rxcui.json?name=${query}`);
             const rxData = await rxResponse.json();
 
+            // Check if FDA API returned results
             if (!fdaData.results || fdaData.results.length === 0) {
-                resultsDiv.innerHTML = "<p>No data found for this medicine.</p>";
+                resultsDiv.innerHTML = "<p>No data found for this medicine in the FDA database.</p>";
                 return;
             }
 
             const label = fdaData.results[0];
             const rxInfo = rxData.idGroup.rxnormId ? rxData.idGroup.rxnormId[0] : null;
 
-            // Create results
-            let html = "";
-            html += `<div class="result">
-          <h3>${label.openfda.brand_name?.[0] || query}</h3>
-          <p><strong>Generic Name:</strong> ${label.openfda.generic_name?.[0] || 'N/A'}</p>
-          <p><strong>Purpose:</strong> ${label.purpose?.join(' ') || 'Information not available.'}</p>
-          <p><strong>Indications:</strong> ${label.indications_and_usage?.join(' ') || 'Information not available.'}</p>
-          <p><strong>Side Effects:</strong> ${label.warnings_and_cautions?.join(' ') || 'Information not available.'}</p>
-          <p><strong>Dosage:</strong> ${label.dosage_and_administration?.join(' ') || 'Information not available.'}</p>
-        </div>`;
+            // Build results HTML
+            let html = `<div class="result">
+                <h3>${label.openfda.brand_name?.[0] || query}</h3>
+                <p><strong>Generic Name:</strong> ${label.openfda.generic_name?.[0] || 'N/A'}</p>
+                <p><strong>Purpose:</strong> ${label.purpose?.join(' ') || 'Information not available.'}</p>
+                <p><strong>Indications:</strong> ${label.indications_and_usage?.join(' ') || 'Information not available.'}</p>
+                <p><strong>Side Effects:</strong> ${label.warnings_and_cautions?.join(' ') || 'Information not available.'}</p>
+                <p><strong>Dosage:</strong> ${label.dosage_and_administration?.join(' ') || 'Information not available.'}</p>
+            </div>`;
 
             if (rxInfo) {
                 html += `<div class="result">
-            <p><strong>RxNorm Code:</strong> ${rxInfo}</p>
-            <p>Additional details available via RxNorm API.</p>
-          </div>`;
+                    <p><strong>RxNorm Code:</strong> ${rxInfo}</p>
+                    <p>Additional details available via RxNorm API.</p>
+                </div>`;
             }
 
             resultsDiv.innerHTML = html;
