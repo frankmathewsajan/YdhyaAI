@@ -20,4 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('arogya_ai.urls')),
+    path('detection/', include('detection.urls'))
 ]

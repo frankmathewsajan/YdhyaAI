@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "arogya_ai.apps.ArogyaAiConfig"
+    "arogya_ai.apps.ArogyaAiConfig",
+    "detection.apps.DetectionConfig"
 ]
 
 MIDDLEWARE = [
