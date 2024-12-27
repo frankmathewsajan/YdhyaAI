@@ -47,10 +47,6 @@ def reminder(request):
     return render(request, 'arogya_ai/features/reminder.html')
 
 
-def detection(request):
-    return render(request, 'arogya_ai/features/detection.html')
-
-
 @login_required
 def setup(request):
     if request.method == 'POST':

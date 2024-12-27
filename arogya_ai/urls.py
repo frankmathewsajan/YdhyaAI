@@ -17,7 +17,6 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('ocr/', views.ocr, name='ocr'),
     path('ai/', views.ai, name='ai'),
-    path('detection/', views.detection, name='detection'),
     path('advice/', views.advice, name='advice'),
     path('payment/', views.payment, name='payment'),
     path('generic', views.get_generic_name, name='get_generic_name'),

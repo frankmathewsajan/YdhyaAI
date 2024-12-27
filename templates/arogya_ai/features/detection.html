@@ -1,1 +1,136 @@
-Detection
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload and Annotation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+        }
+        .left-panel, .right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        .left-panel form {
+            width: 100%;
+        }
+        .left-panel img, .right-panel img {
+            margin: 20px 0;
+            max-width: 100%;
+            border-radius: 15px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .left-panel img:hover, .right-panel img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+        #console {
+            background: #0f0f1e;
+            padding: 15px;
+            border-radius: 10px;
+            width: 100%;
+            color: #0f0;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-y: auto;
+            height: 150px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #6a0572;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+        }
+        button:hover {
+            background: #a406a0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Panel -->
+        <div class="left-panel">
+            <h1>Upload and Annotate Image</h1>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Upload</button>
+            </form>
+            <h2>Image Preview</h2>
+            <img id="image-preview" src="#" alt="No image uploaded yet" style="display:none;">
+        </div>
+
+        <!-- Right Panel -->
+        <div class="right-panel">
+            <h2>Processing Console</h2>
+            <div id="console">Waiting for image processing...</div>
+
+            <h2>Annotated Image</h2>
+            {% if annotated_image_url %}
+                <img src="{{ annotated_image_url }}" alt="Annotated Image">
+            {% endif %}
+            <a href="/">Upload another image</a>
+        </div>
+    </div>
+
+    <script>
+        // Preview uploaded image
+        document.querySelector('input[type="file"]').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const preview = document.getElementById('image-preview');
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+            }
+        });
+
+        // Simulate backend processing console
+        async function fetchProcessingSteps() {
+            const consoleDiv = document.getElementById('console');
+            const steps = [
+                "Initializing image processing...",
+                "Detecting objects in the image...",
+                "Applying annotations...",
+                "Finalizing and generating output..."
+            ];
+            for (const step of steps) {
+                consoleDiv.innerHTML += step + "<br>";
+                await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate delay
+            }
+            consoleDiv.innerHTML += "Processing complete!";
+        }
+
+        {% if annotated_image_url %}
+            document.addEventListener('DOMContentLoaded', function () {
+                fetchProcessingSteps();
+            });
+        {% endif %}
+    </script>
+</body>
+</html>
