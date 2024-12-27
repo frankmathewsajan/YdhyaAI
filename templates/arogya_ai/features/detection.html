@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,12 +17,14 @@
             align-items: center;
             height: 100vh;
         }
+
         .container {
             display: flex;
             gap: 20px;
             width: 90%;
             max-width: 1200px;
         }
+
         .left-panel, .right-panel {
             flex: 1;
             display: flex;
@@ -32,19 +35,23 @@
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
+
         .left-panel form {
             width: 100%;
         }
+
         .left-panel img, .right-panel img {
             margin: 20px 0;
             max-width: 100%;
             border-radius: 15px;
             transition: transform 0.3s ease-in-out;
         }
+
         .left-panel img:hover, .right-panel img:hover {
             transform: scale(1.05);
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
         }
+
         #console {
             background: #0f0f1e;
             padding: 15px;
@@ -57,6 +64,7 @@
             box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
             margin-top: 20px;
         }
+
         button {
             padding: 10px 20px;
             background: #6a0572;
@@ -67,70 +75,139 @@
             cursor: pointer;
             transition: background 0.3s ease-in-out;
         }
+
         button:hover {
             background: #a406a0;
         }
+
+        .right-panel canvas {
+            display: none;
+            width: 100%;
+            height: 100%;
+            max-width: 400px; /* Set a maximum width */
+            max-height: 400px; /* Set a maximum height */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            background-color: #1a1a2e; /* Optional background color */
+        }
+
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Left Panel -->
-        <div class="left-panel">
-            <h1>Upload and Annotate Image</h1>
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Upload</button>
-            </form>
-            <h2>Image Preview</h2>
-            <img id="image-preview" src="#" alt="No image uploaded yet" style="display:none;">
-        </div>
-
-        <!-- Right Panel -->
-        <div class="right-panel">
-            <h2>Processing Console</h2>
-            <div id="console">Waiting for image processing...</div>
-
-            <h2>Annotated Image</h2>
-            {% if annotated_image_url %}
-                <img src="{{ annotated_image_url }}" alt="Annotated Image">
-            {% endif %}
-            <a href="/">Upload another image</a>
-        </div>
+<div class="container">
+    <!-- Left Panel -->
+    <div class="left-panel">
+        <h1>Upload and Annotate Image</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Upload</button>
+        </form>
+        <h2>Image Preview</h2>
+        <img id="image-preview" src="#" alt="No image uploaded yet" style="display:none;">
     </div>
 
-    <script>
-        // Preview uploaded image
-        document.querySelector('input[type="file"]').addEventListener('change', function (event) {
-            const file = event.target.files[0];
-            if (file) {
-                const preview = document.getElementById('image-preview');
-                preview.src = URL.createObjectURL(file);
-                preview.style.display = 'block';
-            }
-        });
+    <!-- Right Panel -->
+    <div class="right-panel">
+        <h2>Processing Console</h2>
+        <div id="console">Waiting for image processing...</div>
 
-        // Simulate backend processing console
-        async function fetchProcessingSteps() {
-            const consoleDiv = document.getElementById('console');
-            const steps = [
-                "Initializing image processing...",
-                "Detecting objects in the image...",
-                "Applying annotations...",
-                "Finalizing and generating output..."
-            ];
-            for (const step of steps) {
-                consoleDiv.innerHTML += step + "<br>";
-                await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate delay
-            }
-            consoleDiv.innerHTML += "Processing complete!";
-        }
+        <h2>Annotated Image</h2>
+
+        <div style="max-width: 400px; max-height: 400px; position: relative;">
+            <canvas id="canvas3d"></canvas>
+            <script async src="https://unpkg.com/es-module-shims@1.0.1/dist/es-module-shims.js"></script>
+            <script type="importmap">
+                {
+                    "imports": {
+                        "@splinetool/runtime": "https://unpkg.com/@splinetool/runtime@1.9.32/build/runtime.js"
+                    }
+                }
+            </script>
+            <script type="module" src="{% static 'detection/js/app.js' %}"></script>
+        </div>
 
         {% if annotated_image_url %}
-            document.addEventListener('DOMContentLoaded', function () {
-                fetchProcessingSteps();
-            });
+            <img src="{{ annotated_image_url }}" alt="Annotated Image">
         {% endif %}
-    </script>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    document.querySelector('form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const formData = new FormData(event.target); // Capture form data
+        const consoleDiv = document.getElementById('console');
+        const canvas = document.getElementById('canvas3d');
+        const rightPanel = document.querySelector('.right-panel');
+        const annotatedImage = document.createElement('img'); // Create an image element to show annotated image
+
+        // Hide the annotated image initially
+        annotatedImage.style.display = 'none';
+
+        // Function to auto-scroll to the bottom of the console
+        function scrollToBottom() {
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+
+        // Show the canvas when the upload button is clicked
+        canvas.style.display = 'block';
+
+        // Show processing message in the console
+        consoleDiv.innerHTML = "Uploading image and starting processing...<br>";
+
+        // Send the form data using Axios
+        axios.post("{% url 'process_image' %}", formData, {
+            headers: {
+                'X-CSRFToken': "{{ csrf_token }}",
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+            .then(response => {
+                const steps = response.data.steps;  // Directly use steps from response
+                let i = 0;
+                const interval = setInterval(() => {
+                    if (i < steps.length) {
+                        const step = steps[i];
+                        consoleDiv.innerHTML += `<b>${step.title}</b><br>${step.description}<br><br>`;
+                        scrollToBottom(); // Scroll to the bottom after adding new content
+                        i++;
+                    } else {
+                        clearInterval(interval);
+                        consoleDiv.innerHTML += "Processing complete!<br>";
+                        scrollToBottom(); // Scroll to the bottom after processing is complete
+
+                        // Hide the canvas and show the annotated image
+                        canvas.style.display = 'none';
+                        annotatedImage.src = response.data.annotated_image_url;
+                        annotatedImage.alt = "Annotated Image";
+                        annotatedImage.style.display = 'block';  // Show the annotated image
+
+                        rightPanel.appendChild(annotatedImage); // Append the annotated image to the right panel
+                    }
+                }, 1000);  // Update every 1 second to simulate a lengthy process
+            })
+            .catch(error => {
+                consoleDiv.innerHTML += "Error processing the image. Please try again.<br>";
+                scrollToBottom(); // Scroll to the bottom on error
+                console.error(error);
+            });
+    });
+
+    // Preview uploaded image
+    document.querySelector('input[type="file"]').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const preview = document.getElementById('image-preview');
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+        }
+    });
+
+</script>
+
+
 </body>
 </html>
