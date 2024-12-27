@@ -29,3 +29,4 @@ migrations/
 /skin_c_detection
 /skin_c_detection/process/data/
 /detection/data/
+media/*
