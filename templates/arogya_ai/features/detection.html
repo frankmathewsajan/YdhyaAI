@@ -34,6 +34,7 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            position: relative; /* For positioning upload button */
         }
 
         .left-panel form {
@@ -91,6 +92,43 @@
             background-color: #1a1a2e; /* Optional background color */
         }
 
+        /* Style for file input */
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            z-index: -1;
+        }
+
+        .file-input-button {
+            background-color: #6a0572;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .file-input-button:hover {
+            background-color: #a406a0;
+        }
+
+        /* Positioning for the upload button */
+        .upload-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: none; /* Hide initially */
+        }
 
     </style>
 </head>
@@ -101,11 +139,20 @@
         <h1>Upload and Annotate Image</h1>
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Upload</button>
+
+            <!-- Image Preview Section -->
+            <h2>Image Preview</h2>
+            <img id="image-preview" src="#" alt="No image uploaded yet" style="display:none;">
+
+            <!-- File Input Button Section -->
+            <div class="file-input-wrapper">
+                <button type="button" class="file-input-button" id="choose-file-button" onclick="document.getElementById('file-input').click();">Choose File</button>
+                <input type="file" id="file-input" name="image" accept="image/*">
+            </div>
+
+            <!-- Upload Button (Initially hidden) -->
+            <button type="submit" class="upload-button" id="upload-button">Upload</button>
         </form>
-        <h2>Image Preview</h2>
-        <img id="image-preview" src="#" alt="No image uploaded yet" style="display:none;">
     </div>
 
     <!-- Right Panel -->
@@ -133,6 +180,7 @@
         {% endif %}
     </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
     document.querySelector('form').addEventListener('submit', function (event) {
@@ -196,18 +244,24 @@
             });
     });
 
-    // Preview uploaded image
-    document.querySelector('input[type="file"]').addEventListener('change', function (event) {
+    // Preview uploaded image and update button text
+    document.querySelector('#file-input').addEventListener('change', function (event) {
         const file = event.target.files[0];
+        const chooseButton = document.getElementById('choose-file-button');
+        const uploadButton = document.getElementById('upload-button');
+
         if (file) {
             const preview = document.getElementById('image-preview');
             preview.src = URL.createObjectURL(file);
             preview.style.display = 'block';
+
+            // Change button text to "Change File"
+            chooseButton.textContent = 'Change File';
+
+            // Show the upload button
+            uploadButton.style.display = 'block';
         }
     });
-
 </script>
-
-
 </body>
 </html>
