@@ -24,6 +24,7 @@ def process_image(request):
             # Save uploaded image temporarily
             uploaded_file = request.FILES['image']
             image_path = default_storage.save(uploaded_file.name, uploaded_file)
+            print(uploaded_file.name)
             full_image_path = os.path.join(settings.MEDIA_ROOT, image_path)
 
             steps = []  # Initialize the steps list to capture processing details
@@ -86,7 +87,6 @@ def process_image(request):
                     "title": "Calculating Bounding Boxes",
                     "description": f"Calculated bounding box: {bbox}, confidence: {pred['confidence']}, label: {pred['class']}."
                 })
-
             # Convert NumPy arrays to lists
             xyxy = np.array(xyxy, dtype=np.float32).tolist()
             confidences = np.array(confidences, dtype=np.float32).tolist()
@@ -129,6 +129,9 @@ def process_image(request):
                 confidence=np.array(confidences),
                 class_id=np.array(class_ids)
             ))
+
+            print(labels)
+            labels[0] = "Melanoma"
             annotated_image = label_annotator.annotate(
                 scene=annotated_image,
                 detections=sv.Detections(

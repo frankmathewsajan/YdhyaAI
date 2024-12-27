@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Upload and Annotation</title>
+    <title>Image Upload</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,7 +34,7 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            position: relative; /* For positioning upload button */
+            position: relative;
         }
 
         .left-panel form {
@@ -85,14 +85,13 @@
             display: none;
             width: 100%;
             height: 100%;
-            max-width: 400px; /* Set a maximum width */
-            max-height: 400px; /* Set a maximum height */
+            max-width: 400px;
+            max-height: 400px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            background-color: #1a1a2e; /* Optional background color */
+            background-color: #1a1a2e;
         }
 
-        /* Style for file input */
         .file-input-wrapper {
             position: relative;
             overflow: hidden;
@@ -122,26 +121,30 @@
             background-color: #a406a0;
         }
 
-        /* Positioning for the upload button */
         .upload-button {
             position: absolute;
             bottom: 20px;
             right: 20px;
-            display: none; /* Hide initially */
+            display: none;
+        }
+
+        /* New CSS for the file name display */
+        #file-name {
+            color: #fff;
+            font-size: 14px;
+            margin-top: 10px;
         }
 
     </style>
 </head>
 <body>
 <div class="container">
-    <!-- Left Panel -->
     <div class="left-panel">
-        <h1>Upload and Annotate Image</h1>
+        <h1>Upload Image</h1>
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <!-- Image Preview Section -->
-            <h2>Image Preview</h2>
+            <h2 style="display:none;" id="image-preview-title">Image Preview</h2>
             <img id="image-preview" src="#" alt="No image uploaded yet" style="display:none;">
 
             <!-- File Input Button Section -->
@@ -150,12 +153,14 @@
                 <input type="file" id="file-input" name="image" accept="image/*">
             </div>
 
-            <!-- Upload Button (Initially hidden) -->
+            <!-- Display the file name -->
+            <p id="file-name"></p>
+
+            <!-- Upload Button -->
             <button type="submit" class="upload-button" id="upload-button">Upload</button>
         </form>
     </div>
 
-    <!-- Right Panel -->
     <div class="right-panel">
         <h2>Processing Console</h2>
         <div id="console">Waiting for image processing...</div>
@@ -186,13 +191,12 @@
     document.querySelector('form').addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent default form submission
 
-        const formData = new FormData(event.target); // Capture form data
+        const formData = new FormData(event.target);
         const consoleDiv = document.getElementById('console');
         const canvas = document.getElementById('canvas3d');
         const rightPanel = document.querySelector('.right-panel');
         const annotatedImage = document.createElement('img'); // Create an image element to show annotated image
 
-        // Hide the annotated image initially
         annotatedImage.style.display = 'none';
 
         // Function to auto-scroll to the bottom of the console
@@ -200,10 +204,7 @@
             consoleDiv.scrollTop = consoleDiv.scrollHeight;
         }
 
-        // Show the canvas when the upload button is clicked
         canvas.style.display = 'block';
-
-        // Show processing message in the console
         consoleDiv.innerHTML = "Uploading image and starting processing...<br>";
 
         // Send the form data using Axios
@@ -214,49 +215,53 @@
             }
         })
             .then(response => {
-                const steps = response.data.steps;  // Directly use steps from response
+                const steps = response.data.steps;
                 let i = 0;
                 const interval = setInterval(() => {
                     if (i < steps.length) {
                         const step = steps[i];
                         consoleDiv.innerHTML += `<b>${step.title}</b><br>${step.description}<br><br>`;
-                        scrollToBottom(); // Scroll to the bottom after adding new content
+                        scrollToBottom();
                         i++;
                     } else {
                         clearInterval(interval);
                         consoleDiv.innerHTML += "Processing complete!<br>";
-                        scrollToBottom(); // Scroll to the bottom after processing is complete
+                        scrollToBottom();
 
-                        // Hide the canvas and show the annotated image
                         canvas.style.display = 'none';
                         annotatedImage.src = response.data.annotated_image_url;
                         annotatedImage.alt = "Annotated Image";
-                        annotatedImage.style.display = 'block';  // Show the annotated image
+                        annotatedImage.style.display = 'block';
 
-                        rightPanel.appendChild(annotatedImage); // Append the annotated image to the right panel
+                        rightPanel.appendChild(annotatedImage);
                     }
-                }, 1000);  // Update every 1 second to simulate a lengthy process
+                }, 1000);
             })
             .catch(error => {
                 consoleDiv.innerHTML += "Error processing the image. Please try again.<br>";
-                scrollToBottom(); // Scroll to the bottom on error
+                scrollToBottom();
                 console.error(error);
             });
     });
 
-    // Preview uploaded image and update button text
     document.querySelector('#file-input').addEventListener('change', function (event) {
         const file = event.target.files[0];
         const chooseButton = document.getElementById('choose-file-button');
         const uploadButton = document.getElementById('upload-button');
+        const fileNameParagraph = document.getElementById('file-name');
 
         if (file) {
             const preview = document.getElementById('image-preview');
+            const title = document.getElementById('image-preview-title');
             preview.src = URL.createObjectURL(file);
             preview.style.display = 'block';
+            title.style.display = 'block';
 
-            // Change button text to "Change File"
+            // Update button text
             chooseButton.textContent = 'Change File';
+
+            // Show the file name
+            fileNameParagraph.textContent = file.name;
 
             // Show the upload button
             uploadButton.style.display = 'block';
