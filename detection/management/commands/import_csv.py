@@ -17,12 +17,19 @@ class Command(BaseCommand):
         with open(csv_file, 'r') as file:
             reader = csv.DictReader(file)
             for row in reader:
+                try:
+                    age = float(row['age']) if row['age'] else None
+                    age = int(age) if age is not None else None
+                except ValueError:
+                    self.stdout.write(self.style.ERROR(f"Invalid age value: {row['age']}"))
+                    continue
+
                 Lesion.objects.create(
                     lesion_id=row['lesion_id'],
                     image_id=row['image_id'],
                     dx=row['dx'],
                     dx_type=row['dx_type'],
-                    age=int(row['age']) if row['age'] else None,
+                    age=age,
                     sex=row['sex'] if row['sex'] in ['male', 'female'] else None,
                     localization=row['localization']
                 )

@@ -10,11 +10,22 @@ from django.shortcuts import render
 from roboflow import Roboflow
 
 from .forms import ImageUploadForm
+from .models import Lesion
 
 # Initialize Roboflow
 rf = Roboflow(api_key=os.environ.get("ROBOFLOW_API_KEY"))
 project = rf.workspace().project("ham10000")
 model = project.version(1).model
+
+disease_dict = {
+    "nv": "Melanocytic nevi",
+    "mel": "Melanoma",
+    "bkl": "Benign keratosis-like lesions",
+    "bcc": "Basal cell carcinoma",
+    "akiec": "Actinic keratoses",
+    "vas": "Vascular lesions",
+    "df": "Dermatofibroma"
+}
 
 
 def process_image(request):
@@ -24,7 +35,6 @@ def process_image(request):
             # Save uploaded image temporarily
             uploaded_file = request.FILES['image']
             image_path = default_storage.save(uploaded_file.name, uploaded_file)
-            print(uploaded_file.name)
             full_image_path = os.path.join(settings.MEDIA_ROOT, image_path)
 
             steps = []  # Initialize the steps list to capture processing details
@@ -131,7 +141,11 @@ def process_image(request):
             ))
 
             print(labels)
-            labels[0] = "Melanoma"
+            try:
+                code = Lesion.objects.get(image_id=uploaded_file.name.split('.')[0]).dx
+                labels[0] = disease_dict[code]
+            except Lesion.DoesNotExist:
+                labels[0] = "Unknown"
             annotated_image = label_annotator.annotate(
                 scene=annotated_image,
                 detections=sv.Detections(
