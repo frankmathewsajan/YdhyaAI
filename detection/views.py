@@ -12,12 +12,22 @@ from .forms import ImageUploadForm
 
 # Initialize Roboflow
 rf = Roboflow(api_key=os.environ.get("ROBOFLOW_API_KEY"))
-project = rf.workspace().project("ham10000")
-model = project.version(1).model
+project = rf.workspace("fyp-mlsby").project("skin-cancer-uq13v")
+model = project.version(2).model
+
+# Define skin cancer classes with full descriptions
+classes = {
+    'akiec': 'Actinic keratoses and intraepithelial carcinomae',
+    'bcc': 'Basal cell carcinoma',
+    'bkl': 'Benign keratosis-like lesions',
+    'df': 'Dermatofibroma',
+    'nv': 'Melanocytic nevi',
+    'vasc': 'Pyogenic granulomas and hemorrhage',
+    'mel': 'Melanoma',
+}
 
 
 def process_image(request):
-    print(0)
     if request.method == 'POST':
         form = ImageUploadForm(request.POST, request.FILES)
         if form.is_valid():
@@ -34,23 +44,27 @@ def process_image(request):
             xyxy = []
             confidences = []
             labels = []
-            print(detections_data)
+            full_labels = []
+
             for pred in detections_data:
                 x = pred["x"] - pred["width"] / 2
                 y = pred["y"] - pred["height"] / 2
                 w = pred["width"]
                 h = pred["height"]
-                print(pred)
+
+                class_name = pred["class"]
+                full_class_name = classes.get(class_name.lower(), class_name)
+
                 xyxy.append([x, y, x + w, y + h])
                 confidences.append(pred["confidence"])
-                labels.append(pred["class"])
-                print(x, y, w, h)
-                print(pred["confidence"], pred["class"])
+                labels.append(class_name)
+                print(full_class_name)
+                full_labels.append(f"{full_class_name} ({pred['confidence']:.2f})")
 
             xyxy = np.array(xyxy, dtype=np.float32)
             confidences = np.array(confidences, dtype=np.float32)
-            class_ids = np.array([labels.index(label) for label in labels])
-            print(xyxy, confidences, class_ids)
+            class_ids = np.array([list(classes.keys()).index(label) if label in classes else 0 for label in labels])
+
             detections = sv.Detections(xyxy=xyxy, confidence=confidences, class_id=class_ids)
 
             # Annotate image
@@ -60,17 +74,24 @@ def process_image(request):
 
             annotated_image = box_annotator.annotate(scene=image, detections=detections)
             annotated_image = label_annotator.annotate(
-                scene=annotated_image, detections=detections, labels=labels
+                scene=annotated_image, detections=detections, labels=full_labels
             )
 
             # Save the annotated image
             output_path = os.path.join(settings.MEDIA_ROOT, "annotated_" + uploaded_file.name)
             cv2.imwrite(output_path, annotated_image)
 
-            # Return annotated image path to template
+            # Return annotated image path and detection results
             annotated_image_url = os.path.join(settings.MEDIA_URL, "annotated_" + uploaded_file.name)
-            return render(request, 'arogya_ai/features/detection.html', {'annotated_image_url': annotated_image_url})
+            detection_results = [
+                {"class": label, "full_name": classes.get(label, label), "confidence": conf}
+                for label, conf in zip(labels, confidences)
+            ]
+
+            return render(request, 'arogya_ai/features/detection.html', {
+                'annotated_image_url': annotated_image_url,
+                'detection_results': detection_results
+            })
 
     form = ImageUploadForm()
-    print(form)
     return render(request, 'arogya_ai/features/detection.html', {'form': form})

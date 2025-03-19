@@ -21,4 +21,7 @@ urlpatterns = [
     path('payment/', views.payment, name='payment'),
     path('generic', views.get_generic_name, name='get_generic_name'),
 
+    path('about/', views.about, name='about'),
+    path('contact/', views.contact, name='contact'),
+
 ]

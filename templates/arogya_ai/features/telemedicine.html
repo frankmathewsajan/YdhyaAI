@@ -1,143 +1,244 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor Consultation</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-KyZXEJX3Qus7pH7J+8bBse4A+J6L9gAlYfmGfZz5F9+F2+0t+f0RZv5wBKi6hd4r" crossorigin="anonymous">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
-            margin: 0;
-            padding: 0;
-        }
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Doctor Consultation</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-KyZXEJX3Qus7pH7J+8bBse4A+J6L9gAlYfmGfZz5F9+F2+0t+f0RZv5wBKi6hd4r" crossorigin="anonymous">
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f2f7fc;
+                margin: 0;
+                padding: 0;
+                padding-top: 70px; /* Added padding to avoid navbar overlap */
+            }
 
-        .doctor-card {
-            display: flex;
-            align-items: center;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
-        }
+            .container {
+                max-width: 1200px;
+                margin: 50px auto;
+            }
 
-        .doctor-card:hover {
-            transform: translateY(-5px);
-        }
+            h2 {
+                text-align: center;
+                color: #5a2a8c;
+                margin-bottom: 60px;
+                font-size: 38px;
+                font-weight: 700;
+            }
 
-        .doctor-img {
-            width: 150px;
-            height: 150px;
-            border-radius: 10px;
-            margin-right: 20px;
-            object-fit: cover;
-        }
+            .doctor-card {
+                background-color: #ffffff;
+                border-radius: 20px;
+                box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+                gap: 20px;
+                margin-bottom: 40px;
+                padding: 30px;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
 
-        .doctor-info {
-            flex-grow: 1;
-        }
+            .doctor-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0px 18px 30px rgba(0, 0, 0, 0.2);
+            }
 
-        .doctor-info h4 {
-            color: #5a2a8c;
-            font-size: 22px;
-            margin-bottom: 5px;
-        }
+            .doctor-img {
+                width: 180px;
+                height: 180px;
+                border-radius: 50%;
+                object-fit: cover;
+                transition: transform 0.3s ease;
+            }
 
-        .doctor-info p {
-            color: #555;
-            font-size: 16px;
-            margin: 0;
-        }
+            .doctor-card:hover .doctor-img {
+                transform: scale(1.1);
+            }
 
-        .btn-book {
-            background-color: #5a2a8c;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
+            .doctor-info {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
 
-        .btn-book:hover {
-            background-color: #4b1a6b;
-        }
+            .doctor-info h4 {
+                color: #5a2a8c;
+                font-size: 30px;
+                font-weight: 600;
+                margin-bottom: 10px;
+            }
 
-        .container {
-            margin: 50px auto;
-            max-width: 1200px;
-        }
+            .doctor-info p {
+                color: #555;
+                font-size: 16px;
+                margin: 5px 0;
+            }
 
-        h2 {
-            color: #5a2a8c;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-    </style>
-</head>
-<body>
-<div class="container">
-    <h2>Select a Doctor for Consultation</h2>
-    <div class="doctor-list">
-        <!-- Example Doctor Cards -->
-        <div class="doctor-card">
-            <img src="https://static.vecteezy.com/system/resources/previews/023/570/349/non_2x/portrait-of-girl-doctor-illustration-ai-generative-free-photo.jpg"
-                 alt="Dr. Ananya Kumar" class="doctor-img">
-            <div class="doctor-info">
-                <h4>Dr. Ananya Kumar</h4>
-                <p>Cardiologist, Apollo Hospital, Bangalore</p>
-                <p>Specialization: Cardiology</p>
+            .specialization {
+                color: #ffffff;
+                background-color: #5a2a8c;
+                padding: 10px 20px;
+                border-radius: 20px;
+                font-size: 16px;
+                font-weight: bold;
+                margin-bottom: 15px;
+                width: fit-content;
+            }
+
+            .btn-book {
+                background-color: #5a2a8c;
+                color: white;
+                padding: 12px 30px;
+                border-radius: 30px;
+                font-size: 18px;
+                font-weight: bold;
+                text-decoration: none;
+                transition: background-color 0.3s ease, transform 0.3s ease;
+            }
+
+            .btn-book:hover {
+                background-color: #4b1a6b;
+                transform: translateY(-5px);
+                color: #f2f7fc;
+            }
+
+            @media (max-width: 768px) {
+                .doctor-card {
+                    grid-template-columns: 1fr;
+                    text-align: center;
+                }
+
+                .doctor-info {
+                    text-align: center;
+                }
+
+                .doctor-img {
+                    margin: 0 auto;
+                }
+            }
+
+            /* Navbar Styles */
+            .navbar {
+                background-color: #5a2a8c;
+                padding: 15px 30px;
+                position: fixed;
+                top: 0;
+                width: 100%;
+                z-index: 1000;
+            }
+
+            .navbar .navbar-brand img {
+                width: 150px; /* Adjust based on your logo size */
+                height: auto;
+            }
+
+            .navbar-nav {
+                margin-left: auto;
+            }
+
+            .navbar-nav .nav-link {
+                color: white !important;
+                font-size: 18px;
+                font-weight: 500;
+                margin-left: 20px;
+            }
+
+            .navbar-nav .nav-link:hover {
+                color: #ddd !important;
+            }
+
+            .navbar-toggler-icon {
+                background-color: white;
+            }
+
+            .navbar-collapse {
+                justify-content: flex-end;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" style="color: white; font-size: 20px;text-decoration: none; font-weight: bold; " href="index.html">
+                Ydhya
+            </a>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container">
+            <h2>Meet Our Expert Doctors</h2>
+            <div class="doctor-list">
+                <!-- Doctor 1 -->
+                <div class="doctor-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqGXMKYT2E4SDS_8s9FFWnImtgu_HDbEf1bA&s" alt="Dr. Devi Prasad Shetty" class="doctor-img">
+                    <div class="doctor-info">
+                        <h4>Dr. Devi Prasad Shetty</h4>
+                        <div class="specialization">Cardiologist</div>
+                        <p>Narayana Health (Narayana Hrudayalaya), Bangalore</p>
+                        <p><strong>Experience:</strong> 35+ Years</p>
+                        <p><strong>Location:</strong> Bangalore</p>
+                    </div>
+                    <a href="{% url 'booking' %}" class="btn-book">Book Appointment</a>
+                </div>
+
+                <!-- Doctor 2 -->
+                <div class="doctor-card">
+                    <img src="https://peacemedicaltourism.com/assets/uploads/doctors/DR_NARESH_TREHAN_IS_BEST_CARDIAC_VASCULAR_AND_CARDIOTHORACIC_SURGEON_INDIA.jpg" alt="Dr. Naresh Trehan" class="doctor-img">
+                    <div class="doctor-info">
+                        <h4> Dr. Naresh Trehan</h4>
+                        <div class="specialization">Cardiovascular Surgeon</div>
+                        <p>Medanta - The Medicity, Gurgaon</p>
+                        <p><strong>Experience:</strong> 45+ years</p>
+                        <p><strong>Location:</strong> Gurgaon</p>
+                    </div>
+                    <a href="{% url 'booking' %}" class="btn-book">Book Appointment</a>
+                </div>
+
+                <!-- Doctor 3 -->
+                <div class="doctor-card">
+                    <img src="https://etimg.etb2bimg.com/photo/96365924.cms" alt="Dr. Randeep Guleria" class="doctor-img">
+                    <div class="doctor-info">
+                        <h4>Dr. Randeep Guleria</h4>
+                        <div class="specialization">Pulmonology</div>
+                        <p>All India Institute of Medical Sciences (AIIMS), New Delhi</p>
+                        <p><strong>Experience:</strong> 30+ years</p>
+                        <p><strong>Location:</strong> New Delhi</p>
+                    </div>
+                    <a href="{% url 'booking' %}" class="btn-book">Book Appointment</a>
+                </div>
+
+                <!-- Doctor 4 -->
+                <div class="doctor-card">
+                    <img src="https://static.toiimg.com/imagenext/toiblogs/photo/blogs/wp-content/uploads/2022/01/2_The-Hindu_Prathap-Reddy_Interview_Image.jpg" alt="Dr. Prathap C. Reddy" class="doctor-img">
+                    <div class="doctor-info">
+                        <h4>Dr. Prathap C. Reddy</h4>
+                        <div class="specialization">Cardiology</div>
+                        <p>Apollo Hospitals, Chennai</p>
+                        <p><strong>Experience:</strong> 50+ years</p>
+                        <p><strong>Location:</strong> Chennai</p>
+                    </div>
+                    <a href="{% url 'booking' %}" class="btn-book">Book Appointment</a>
+                </div>
+
+                <!-- Doctor 5 -->
+                <div class="doctor-card">
+                    <img src="https://www.mssrf.org/wp-content/uploads/2023/02/WhatsApp-Image-2023-01-31-at-10.57.59-AM.jpeg" alt="Dr. Soumya Swaminathan" class="doctor-img">
+                    <div class="doctor-info">
+                        <h4>Dr. Soumya Swaminathan</h4>
+                        <div class="specialization">Pediatrics </div>
+                        <p>World Health Organization (WHO) – Former Chief Scientist</p>
+                        <p><strong>Experience:</strong> 30+ years</p>
+                        <p><strong>Location:</strong> New Delhi</p>
+                    </div>
+                    <a href="{% url 'booking' %}" class="btn-book">Book Appointment</a>
+                </div>
             </div>
-            <a href="{% url 'booking' %}" class="btn-book">Book Appointment</a>
         </div>
 
-        <div class="doctor-card">
-            <img src="https://via.placeholder.com/150" alt="Dr. Ravi Shankar" class="doctor-img">
-            <div class="doctor-info">
-                <h4>Dr. Ravi Shankar</h4>
-                <p>Orthopedic Surgeon, AIIMS, New Delhi</p>
-                <p>Specialization: Orthopedics</p>
-            </div>
-            <a href="{% url 'booking' %}" class="btn-book">Book Appointment</a>
-        </div>
-
-        <div class="doctor-card">
-            <img src="https://via.placeholder.com/150" alt="Dr. Priya Soni" class="doctor-img">
-            <div class="doctor-info">
-                <h4>Dr. Priya Soni</h4>
-                <p>Pediatrician, Fortis Hospital, Mumbai</p>
-                <p>Specialization: Pediatrics</p>
-            </div>
-            <a href="{% url 'booking' %}" class="btn-book">Book Appointment</a>
-        </div>
-
-        <!-- Repeat for 23 doctors -->
-        <div class="doctor-card">
-            <img src="https://via.placeholder.com/150" alt="Dr. Arvind Verma" class="doctor-img">
-            <div class="doctor-info">
-                <h4>Dr. Arvind Verma</h4>
-                <p>Neurologist, Max Super Speciality Hospital, Delhi</p>
-                <p>Specialization: Neurology</p>
-            </div>
-            <a href="{% url 'booking' %}" class="btn-book">Book Appointment</a>
-        </div>
-
-        <div class="doctor-card">
-            <img src="https://via.placeholder.com/150" alt="Dr. Neha Joshi" class="doctor-img">
-            <div class="doctor-info">
-                <h4>Dr. Neha Joshi</h4>
-                <p>Gynecologist, Kokilaben Dhirubhai Ambani Hospital, Mumbai</p>
-                <p>Specialization: Gynecology</p>
-            </div>
-            <a href="{% url 'booking' %}" class="btn-book">Book Appointment</a>
-        </div>
-
-        <!-- Add more doctor cards similarly -->
-        <!-- Total 23 doctors -->
-    </div>
-</div>
-</body>
-</html>
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gyb3d0kA4cozssZT5C2pGJiBOa3Yd6GgD6fQGIVfZOJ3BCsw2P0p/6Em7HAw3YWGFW1mGlyl6LZZlF7w4fJau" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0hF6C1kj0y7HpJk1t9ERjjzZGV9Kddr6D5yDViH67XmnKF+z" crossorigin="anonymous"></script>
+    </body>
+    </html>

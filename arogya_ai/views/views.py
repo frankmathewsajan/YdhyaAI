@@ -14,14 +14,46 @@ def index(request):
         return render(request, 'index.html')
     return render(request, 'welcome.html')
 
+def about(request):
+    return render(request, 'arogya_ai/features/about.html')
+
+def contact(request):
+    return render(request, 'arogya_ai/features/contact.html')
 
 def telemedicine(request):
     return render(request, 'arogya_ai/features/telemedicine.html')
 
+def payment(request):
+    return render(request, 'arogya_ai/features/payment.html')
 
+classes = {
+    'akiec': 'Actinic keratoses and intraepithelial carcinomae',
+    'bcc': 'Basal cell carcinoma',
+    'bkl': 'Benign keratosis-like lesions',
+    'df': 'Dermatofibroma',
+    'nv': 'Melanocytic nevi',
+    'vasc': 'Pyogenic granulomas and hemorrhage',
+    'mel': 'Melanoma',
+}
 def ai(request):
-    query = request.GET.get('q', '')  # Get the 'q' parameter with empty string as default
-    context = {'query': query}  # Create context dictionary with the query
+    # Check for general query parameter
+    query = request.GET.get('q', '')
+
+    # Check for medical condition parameter
+    medical_condition = request.GET.get('m', '')
+
+    if medical_condition:
+        # Create a detailed prompt for the medical condition
+        query = f"Please provide detailed information about {classes.get(medical_condition.lower())}, including:\n" \
+               f"- What is {classes.get(medical_condition.lower())} and how is it diagnosed?\n" \
+               f"- What causes this condition?\n" \
+               f"- What are the symptoms and stages?\n" \
+               f"- What treatment options are available?\n" \
+               f"- What is the prognosis and prevention methods?\n" \
+               f"- Are there any recent medical advances related to this condition?"
+
+    # Create context with the query
+    context = {'query': query}
     return render(request, 'arogya_ai/ai.html', context)
 
 
@@ -89,7 +121,6 @@ def chat(request):
         try:
             data = json.loads(request.body)
             user_message = data.get('message', '')
-            print(user_message)
 
             # Generate a response
             bot_response = get_response(50, user_message)
@@ -97,7 +128,6 @@ def chat(request):
             return JsonResponse({"response": bot_response})
         except Exception as e:
             # Convert exception to a string for JSON serialization
-            print(e)
             return JsonResponse({"response": str(e)}, status=500)
 
 

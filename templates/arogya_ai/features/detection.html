@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Upload and Annotation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,12 +19,14 @@
             align-items: center;
             height: 100vh;
         }
+
         .container {
             display: flex;
             gap: 20px;
             width: 90%;
             max-width: 1200px;
         }
+
         .left-panel, .right-panel {
             flex: 1;
             display: flex;
@@ -32,31 +37,36 @@
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
+
         .left-panel form {
             width: 100%;
         }
+
         .left-panel img, .right-panel img {
             margin: 20px 0;
             max-width: 100%;
             border-radius: 15px;
             transition: transform 0.3s ease-in-out;
         }
+
         .left-panel img:hover, .right-panel img:hover {
             transform: scale(1.05);
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
         }
+
         #console {
             background: #0f0f1e;
             padding: 15px;
             border-radius: 10px;
             width: 100%;
             color: #0f0;
-            font-family: "Courier New", Courier, monospace;
+            font-family: 'Courier New', Courier, monospace;
             overflow-y: auto;
             height: 150px;
             box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
             margin-top: 20px;
         }
+
         button {
             padding: 10px 20px;
             background: #6a0572;
@@ -67,70 +77,122 @@
             cursor: pointer;
             transition: background 0.3s ease-in-out;
         }
+
         button:hover {
             background: #a406a0;
+        }
+
+        .detection-info {
+            width: 100%;
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .result-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .ask-ai-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #2a9d8f;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ask-ai-btn:hover {
+            background: #1d7d70;
+            transform: translateY(-2px);
+        }
+
+        .ask-ai-btn i {
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Left Panel -->
-        <div class="left-panel">
-            <h1>Upload and Annotate Image</h1>
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Upload</button>
-            </form>
-            <h2>Image Preview</h2>
-            <img id="image-preview" src="#" alt="No image uploaded yet" style="display: none;">
-        </div>
-
-        <!-- Right Panel -->
-        <div class="right-panel">
-            <h2>Processing Console</h2>
-            <div id="console">Waiting for image processing...</div>
-
-            <h2>Annotated Image</h2>
-            {% if annotated_image_url %}
-                <img src="{{ annotated_image_url }}" alt="Annotated Image">
-            {% endif %}
-            <a href="/">Upload another image</a>
-        </div>
+<div class="container">
+    <!-- Left Panel -->
+    <div class="left-panel">
+        <h1>Upload and Annotate Image</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Upload</button>
+        </form>
+        <h2>Image Preview</h2>
+        <img id="image-preview" src="#" alt="No image uploaded yet" style="display:none;">
     </div>
 
-    <script>
-        // Preview uploaded image
-        document.querySelector("input[type='file']").addEventListener("change", function (event) {
-            const file = event.target.files[0];
-            if (file) {
-                const preview = document.getElementById("image-preview");
-                preview.src = URL.createObjectURL(file);
-                preview.style.display = "block";
-            }
-        });
+    <!-- Right Panel -->
+    <div class="right-panel">
+        <h2>Processing Console</h2>
+        <div id="console">Waiting for image processing...</div>
 
-        // Simulate backend processing console
-        async function fetchProcessingSteps() {
-            const consoleDiv = document.getElementById("console");
-            const steps = [
-                "Initializing image processing...",
-                "Detecting objects in the image...",
-                "Applying annotations...",
-                "Finalizing and generating output..."
-            ];
-            for (const step of steps) {
-                consoleDiv.innerHTML += step + "<br>";
-                await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate delay
-            }
-            consoleDiv.innerHTML += "Processing complete!";
-        }
-
+        <h2>Annotated Image</h2>
         {% if annotated_image_url %}
-            document.addEventListener("DOMContentLoaded", function () {
-                fetchProcessingSteps();
-            });
+            <img src="{{ annotated_image_url }}" alt="Annotated Image">
+
+            {% if detection_results %}
+                <div class="detection-info">
+                    <h3>Detection Results</h3>
+                    {% for result in detection_results %}
+                        <div class="result-item">
+                            <p><strong>{{ result.full_name }}</strong> ({{ result.confidence|floatformat:2 }})</p>
+                            <button class="ask-ai-btn"
+                                    onclick="window.location.href='/ai?m={{ result.full_name|urlencode }}'">
+                                <i class="fas fa-robot"></i> Ask AI about this condition
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
         {% endif %}
-    </script>
+        <a href="/">Upload another image</a>
+    </div>
+</div>
+
+<script>
+    // Preview uploaded image
+    document.querySelector('input[type="file"]').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const preview = document.getElementById('image-preview');
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+        }
+    });
+
+    // Simulate backend processing console
+    async function fetchProcessingSteps() {
+        const consoleDiv = document.getElementById('console');
+        const steps = [
+            "Initializing image processing...",
+            "Detecting objects in the image...",
+            "Applying annotations...",
+            "Finalizing and generating output..."
+        ];
+        for (const step of steps) {
+            consoleDiv.innerHTML += step + "<br>";
+            await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate delay
+        }
+        consoleDiv.innerHTML += "Processing complete!";
+    }
+
+    {% if annotated_image_url %}
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchProcessingSteps();
+        });
+    {% endif %}
+</script>
 </body>
 </html>
