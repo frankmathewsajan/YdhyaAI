@@ -3,156 +3,349 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Page</title>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Payment - Ydhya AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #5a2a8c;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --background-color: #f8f9fa;
+            --text-color: #2c3e50;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(to right, #6a11cb, #2575fc);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
             color: #fff;
-            margin: 0;
-            height: 100vh;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="rgba(255,255,255,0.05)"/></svg>');
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .navbar {
+            background: rgba(26, 26, 46, 0.95);
+            padding: 1rem 2rem;
+            box-shadow: var(--box-shadow);
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .logo i {
+            color: var(--accent-color);
+            font-size: 2rem;
         }
 
         .container {
-            width: 100vw;
-            height: 100vh;
-            background: #fff;
-            color: #333;
-            padding: 40px;
-            border-radius: 0;
-            box-shadow: none;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            max-width: 1200px;
+            margin: 100px auto 40px;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
         }
 
-        h2 {
-            font-size: 32px;
-            font-weight: 700;
+        .payment-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .order-summary {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .order-summary h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-item span {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .total-amount {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .payment-form {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .payment-form h2 {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        .form-group {
             margin-bottom: 20px;
         }
 
-        .payment-options {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-            width: 100%;
-        }
-
-        .payment-option {
-            background-color: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            width: 200px;
-            padding: 20px;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            text-align: center;
-            position: relative;
-        }
-
-        .payment-option img {
-            width: 60px;
-            height: 60px;
-            margin-bottom: 10px;
-        }
-
-        .payment-option:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-pay {
-            background: #2575fc;
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
             color: #fff;
-            padding: 12px 25px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.3s ease;
-            margin-top: 20px;
+            font-weight: 500;
         }
 
-        .btn-pay:hover {
-            background: #0056b3;
-            transform: translateY(-3px);
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .card-details {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .payment-method {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .payment-method i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        .payment-method p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary-color), #7a3ab8);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(90, 42, 140, 0.3);
+        }
+
+        .security-info {
+            margin-top: 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .security-info i {
+            color: var(--accent-color);
+            margin-right: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 80px 20px 20px;
+                padding: 10px;
+            }
+
+            .payment-section {
+                grid-template-columns: 1fr;
+            }
+
+            .card-details {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
+    <nav class="navbar">
+        <a href="/" class="logo">
+            <i class="fas fa-robot"></i>
+            Ydhya
+        </a>
+    </nav>
+
     <div class="container">
-        <h2>Complete Your Payment</h2>
-        <p>Consultation Fee: ₹99</p>
-        <h4>Select a Payment Method</h4>
-        <div class="payment-options">
-            <div class="payment-option" id="creditCard" onclick="selectPayment('Credit/Debit Card')">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg" alt="Credit/Debit Card">
-                <p>Credit/Debit Card</p>
+        <section class="payment-section">
+            <div class="order-summary">
+                <h2>Order Summary</h2>
+                <div class="summary-item">
+                    <span>Consultation Fee</span>
+                    <span>₹1,500</span>
+                </div>
+                <div class="summary-item">
+                    <span>Service Tax (18%)</span>
+                    <span>₹270</span>
+                </div>
+                <div class="summary-item">
+                    <span>Platform Fee</span>
+                    <span>₹50</span>
+                </div>
+                <div class="total-amount">
+                    <span>Total Amount</span>
+                    <span>₹1,820</span>
+                </div>
             </div>
-            <div class="payment-option" id="upi" onclick="selectPayment('UPI')">
-                <img src="https://presentations.gov.in/wp-content/uploads/2020/06/Preview.png" alt="UPI">
-                <p>UPI</p>
+
+            <div class="payment-form">
+                <h2>Payment Details</h2>
+                <div class="payment-methods">
+                    <div class="payment-method">
+                        <i class="fab fa-cc-visa"></i>
+                        <p>Visa</p>
+                    </div>
+                    <div class="payment-method">
+                        <i class="fab fa-cc-mastercard"></i>
+                        <p>Mastercard</p>
+                    </div>
+                    <div class="payment-method">
+                        <i class="fab fa-cc-amex"></i>
+                        <p>Amex</p>
+                    </div>
+                    <div class="payment-method">
+                        <i class="fas fa-university"></i>
+                        <p>Net Banking</p>
+                    </div>
+                </div>
+
+                <form>
+                    <div class="form-group">
+                        <label for="cardName">Cardholder Name</label>
+                        <input type="text" id="cardName" required placeholder="Enter cardholder name">
+                    </div>
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" required placeholder="1234 5678 9012 3456">
+                    </div>
+                    <div class="card-details">
+                        <div class="form-group">
+                            <label for="expiry">Expiry Date</label>
+                            <input type="text" id="expiry" required placeholder="MM/YY">
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" required placeholder="123">
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-lock"></i>
+                        Pay ₹1,820
+                    </button>
+                </form>
+
+                <div class="security-info">
+                    <i class="fas fa-shield-alt"></i>
+                    Your payment information is secure and encrypted
+                </div>
             </div>
-            <div class="payment-option" id="netBanking" onclick="selectPayment('Net Banking')">
-                <img src="https://cdn5.vectorstock.com/i/1000x1000/41/54/internet-banking-icon-online-payment-sign-vector-14044154.jpg" alt="Net Banking">
-                <p>Net Banking</p>
-            </div>
-            <div class="payment-option" id="wallets" onclick="selectPayment('Wallets')">
-                <img src="https://static.vecteezy.com/system/resources/previews/004/777/201/non_2x/wallets-logo-template-creative-wallets-logo-design-concepts-vector.jpg" alt="Wallets">
-                <p>Wallets</p>
-            </div>
-        </div>
-        <button class="btn-pay" id="proceedButton" onclick="proceedToPayment()" disabled>Proceed to Pay ₹99</button>
+        </section>
     </div>
-
-    <script>
-        let selectedPaymentMethod = null;
-
-        function selectPayment(method) {
-            document.querySelectorAll('.payment-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            selectedPaymentMethod = method;
-            document.getElementById('proceedButton').disabled = false;
-        }
-
-        function proceedToPayment() {
-            if (!selectedPaymentMethod) {
-                alert('Please select a payment method.');
-                return;
-            }
-            var options = {
-                "key": "your_razorpay_key_here",
-                "amount": 9900,
-                "currency": "INR",
-                "name": "Doctor Consultation",
-                "description": "Book your appointment with a doctor",
-                "handler": function (response) {
-                    alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
-                },
-                "prefill": {
-                    "name": "Patient Name",
-                    "email": "patient@example.com",
-                    "contact": "1234567890"
-                },
-                "theme": {
-                    "color": "#2575fc"
-                }
-            };
-            var rzp1 = new Razorpay(options);
-            rzp1.open();
-        }
-    </script>
 </body>
 </html>

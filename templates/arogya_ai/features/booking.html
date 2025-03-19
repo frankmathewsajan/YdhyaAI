@@ -3,204 +3,339 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor Consultation Slot Booking</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Book Appointment - Ydhya AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
+        :root {
+            --primary-color: #5a2a8c;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --background-color: #f8f9fa;
+            --text-color: #2c3e50;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #e3f2fd, #f3f4f7);
-            color: #333;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             min-height: 100vh;
+            color: #fff;
+            line-height: 1.6;
+            position: relative;
             overflow-x: hidden;
         }
 
-        /* Navbar styling */
-        .navbar {
-            background: #3498db;
-            padding: 10px 20px;
-            position: sticky;
+        body::before {
+            content: '';
+            position: fixed;
             top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="rgba(255,255,255,0.05)"/></svg>');
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .navbar {
+            background: rgba(26, 26, 46, 0.95);
+            padding: 1rem 2rem;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
             z-index: 1000;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .navbar-brand img {
-            width: 120px;
-            height: auto;
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            padding: 20px;
-            font-size: 48px;
-            font-weight: bold;
-            color: #2c3e50;
-            animation: fadeInDown 1s ease-in-out;
-        }
-
-        /* Form Styling */
-        form {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 0;
-        }
-
-        label {
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .form-control, select, textarea {
-            border-radius: 8px;
-            margin-top: 10px;
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            transition: transform 0.2s ease, box-shadow 0.3s ease;
-        }
-
-        .form-control:hover, select:hover, textarea:hover {
-            border-color: #3498db;
-            transform: scale(1.02);
-            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, #27ae60, #2980b9);
-            border: none;
-            padding: 12px 20px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 10px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-            background: linear-gradient(45deg, #1abc9c, #3498db);
-        }
-                                                                    
-        footer {
-            text-align: center;
-            padding: 15px;
-            background: #3498db;
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
             color: #fff;
-            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .logo i {
+            color: var(--accent-color);
+            font-size: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 100px auto 40px;
+            padding: 20px;
             position: relative;
+            z-index: 1;
         }
 
-        .healthcare-icon {
-            display: block;
+        .booking-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .booking-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .booking-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .booking-header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff, #a8a8a8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .booking-header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+            max-width: 600px;
             margin: 0 auto;
-            width: 80px;
-            height: auto;
         }
 
-        @keyframes fadeInDown {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
+        .booking-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            color: #fff;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--primary-color), #7a3ab8);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            grid-column: 1 / -1;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(90, 42, 140, 0.3);
+        }
+
+        .booking-info {
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .booking-info h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .info-item i {
+            color: var(--accent-color);
+            font-size: 1.5rem;
+        }
+
+        .info-item p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 80px 20px 20px;
+                padding: 10px;
             }
-            to {
-                transform: translateY(0);
-                opacity: 1;
+
+            .booking-section {
+                padding: 20px;
+            }
+
+            .booking-header h1 {
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
-        <a class="navbar-brand" style="color: white; font-size: 20px;text-decoration: none; font-weight: bold; " href="index.html">
+        <a href="/" class="logo">
+            <i class="fas fa-robot"></i>
             Ydhya
         </a>
     </nav>
 
-    <!-- Header -->
-    <div class="header">
-        Book Your Consultation Slot
+    <div class="container">
+        <section class="booking-section">
+            <div class="booking-header">
+                <h1>Book Your Appointment</h1>
+                <p>Schedule your consultation with our healthcare professionals</p>
+            </div>
+
+            <form class="booking-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" required placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" required placeholder="Enter your phone number">
+                </div>
+                <div class="form-group">
+                    <label for="doctor">Select Doctor</label>
+                    <select id="doctor" required>
+                        <option value="">Choose a doctor</option>
+                        <option value="dr1">Dr. Devi Prasad Shetty - Cardiologist</option>
+                        <option value="dr2">Dr. Naresh Trehan - Cardiovascular Surgeon</option>
+                        <option value="dr3">Dr. Randeep Guleria - Pulmonologist</option>
+                        <option value="dr4">Dr. Prathap C. Reddy - Cardiologist</option>
+                        <option value="dr5">Dr. Soumya Swaminathan - Pediatrician</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date">Appointment Date</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="time">Preferred Time</label>
+                    <input type="time" id="time" required>
+                </div>
+                <div class="form-group">
+                    <label for="type">Consultation Type</label>
+                    <select id="type" required>
+                        <option value="">Select consultation type</option>
+                        <option value="video">Video Consultation</option>
+                        <option value="in-person">In-Person Visit</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Additional Notes</label>
+                    <textarea id="message" placeholder="Any specific concerns or questions you'd like to discuss"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-calendar-check"></i>
+                    Book Appointment
+                </button>
+            </form>
+
+            <div class="booking-info">
+                <h2>Important Information</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <p>Appointments are available Monday to Saturday, 9 AM to 8 PM</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-video"></i>
+                        <p>Video consultations require a stable internet connection</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-file-medical"></i>
+                        <p>Please have your medical records ready for the consultation</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <p>You'll receive a confirmation call within 24 hours</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-
-    <!-- Form Section -->
-    <form>
-        <div class="form-group">
-            <label for="patientName">Full Name:</label>
-            <input type="text" id="patientName" class="form-control" placeholder="Enter your full name" required>
-        </div>
-        <div class="form-group">
-            <label for="patientAge">Age:</label>
-            <input type="number" id="patientAge" class="form-control" placeholder="Enter your age" min="1" max="120" required>
-        </div>
-        <div class="form-group">
-            <label for="gender">Gender:</label>
-            <select id="gender" class="form-control" required>
-                <option value="">-- Select your gender --</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="contactNumber">Contact Number:</label>
-            <input type="tel" id="contactNumber" class="form-control" placeholder="Enter your contact number" pattern="[0-9]{10}" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email Address:</label>
-            <input type="email" id="email" class="form-control" placeholder="Enter your email address" required>
-        </div>
-        <div class="form-group">
-            <label for="reason">Reason for Visit:</label>
-            <textarea id="reason" class="form-control" placeholder="Briefly describe the reason for your visit" rows="3" required></textarea>
-        </div>
-        <div class="form-group">
-            <label for="date">Preferred Date:</label>
-            <input type="date" id="date" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="timeSlot">Choose Your Slot:</label>
-            <select id="timeSlot" class="form-control" required>
-                <option value="">-- Select a time slot --</option>
-                <option value="9:00 AM">9:00 AM</option>
-                <option value="10:00 AM">10:00 AM</option>
-                <option value="11:00 AM">11:00 AM</option>
-                <option value="12:00 PM">12:00 PM</option>
-                <option value="2:00 PM">2:00 PM</option>
-                <option value="3:00 PM">3:00 PM</option>
-                <option value="4:00 PM">4:00 PM</option>
-            </select>
-        </div>
-        <div class="text-center mt-4">
-            <button type="button" class="btn btn-primary" onclick="proceedToPayment()">Proceed to Payment</button>
-        </div>
-    </form>
-
-    <footer>
-        &copy; 2024 Ydhya AI | All Rights Reserved.
-    </footer>
-
-    <script>
-        function proceedToPayment() {
-            const name = document.getElementById('patientName').value;
-            const age = document.getElementById('patientAge').value;
-            const gender = document.getElementById('gender').value;
-            const contact = document.getElementById('contactNumber').value;
-            const email = document.getElementById('email').value;
-            const reason = document.getElementById('reason').value;
-            const date = document.getElementById('date').value;
-            const slot = document.getElementById('timeSlot').value;
-
-            if (!name || !age || !gender || !contact || !email || !reason || !date || !slot) {
-                alert('Please fill out all fields and select a slot.');
-                return;
-            }
-
-            alert(`Thank you, ${name}! Your consultation slot on ${date} at ${slot} is booked. Proceeding to payment.`);
-            window.location.href = `{% url 'payment' %}`;
-        }
-    </script>
 </body>
 </html>

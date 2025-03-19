@@ -10,9 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 def index(request):
-    if request.user.is_authenticated:
-        return render(request, 'index.html')
-    return render(request, 'welcome.html')
+    return render(request, 'index.html')
 
 def about(request):
     return render(request, 'arogya_ai/features/about.html')
