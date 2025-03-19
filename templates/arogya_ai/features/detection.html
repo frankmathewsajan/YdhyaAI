@@ -51,7 +51,7 @@
             border-radius: 10px;
             width: 100%;
             color: #0f0;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: "Courier New", Courier, monospace;
             overflow-y: auto;
             height: 150px;
             box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
@@ -83,7 +83,7 @@
                 <button type="submit">Upload</button>
             </form>
             <h2>Image Preview</h2>
-            <img id="image-preview" src="#" alt="No image uploaded yet" style="display:none;">
+            <img id="image-preview" src="#" alt="No image uploaded yet" style="display: none;">
         </div>
 
         <!-- Right Panel -->
@@ -101,18 +101,18 @@
 
     <script>
         // Preview uploaded image
-        document.querySelector('input[type="file"]').addEventListener('change', function (event) {
+        document.querySelector("input[type='file']").addEventListener("change", function (event) {
             const file = event.target.files[0];
             if (file) {
-                const preview = document.getElementById('image-preview');
+                const preview = document.getElementById("image-preview");
                 preview.src = URL.createObjectURL(file);
-                preview.style.display = 'block';
+                preview.style.display = "block";
             }
         });
 
         // Simulate backend processing console
         async function fetchProcessingSteps() {
-            const consoleDiv = document.getElementById('console');
+            const consoleDiv = document.getElementById("console");
             const steps = [
                 "Initializing image processing...",
                 "Detecting objects in the image...",
@@ -127,7 +127,7 @@
         }
 
         {% if annotated_image_url %}
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener("DOMContentLoaded", function () {
                 fetchProcessingSteps();
             });
         {% endif %}

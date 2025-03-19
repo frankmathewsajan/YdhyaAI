@@ -3,175 +3,387 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arogya AI Interface</title>
+    <title>Arogya AI Chat Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(135deg, #e0eafc, #cfdef3);
-            font-family: Arial, sans-serif;
-            color: #333;
-            transition: background 0.5s ease;
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --background-color: #f8f9fa;
+            --text-color: #2c3e50;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .glass-container {
-            width: 90%;
-            max-width: 600px;
-            padding: 20px;
-            border-radius: 15px;
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: var(--accent-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 80px auto 20px;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            height: calc(100vh - 100px);
+        }
+
+        .chat-container {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-header {
+            padding: 20px;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chat-header i {
+            font-size: 1.5rem;
+        }
+
+        .chat-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
         }
 
         #chatbox {
-            height: 400px;
+            flex: 1;
+            padding: 20px;
             overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.5);
         }
 
         .message {
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 10px;
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: var(--border-radius);
+            animation: fadeIn 0.3s ease;
+            position: relative;
+            line-height: 1.5;
         }
 
         .user-message {
-            text-align: right;
-            background-color: rgba(173, 216, 230, 0.8);
-            color: #333;
+            background: var(--primary-color);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
         }
 
         .bot-message {
-            text-align: left;
-            background-color: rgba(144, 238, 144, 0.8);
-            color: #333;
+            background: white;
+            color: var(--text-color);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            box-shadow: var(--box-shadow);
         }
 
-        .input-group {
+        .input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
-            margin-top: 10px;
+            gap: 15px;
         }
 
         #userInput {
             flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 10px;
-            margin-right: 10px;
+            padding: 12px 20px;
+            border: 2px solid #e1e1e1;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        #userInput:focus {
             outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
         }
 
         #sendButton {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 10px;
-            background-color: #007bff;
+            padding: 12px 25px;
+            background: var(--primary-color);
             color: white;
+            border: none;
+            border-radius: var(--border-radius);
             cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
         }
 
         #sendButton:hover {
-            background-color: #0056b3;
+            background: #357abd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
         }
 
-        h3 {
-            text-align: center;
-            margin-bottom: 20px;
+        .loading {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            align-self: flex-start;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .loading i {
+            color: var(--primary-color);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            align-self: flex-start;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 60px 10px 10px;
+                padding: 10px;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+
+            .input-container {
+                padding: 15px;
+            }
+
+            #sendButton {
+                padding: 12px 20px;
+            }
         }
     </style>
 </head>
 <body>
-<div class="glass-container">
-    <h3>Arogya AI</h3>
-    <div id="chatbox" class="mb-3">
-        <!-- Chat messages will appear here -->
+    <nav class="navbar">
+        <a href="/" class="logo">
+            <i class="fas fa-robot"></i>
+            Arogya AI
+        </a>
+    </nav>
+
+    <div class="container">
+        <div class="chat-container">
+            <div class="chat-header">
+                <i class="fas fa-comments"></i>
+                <h2>Chat with Arogya AI</h2>
+            </div>
+            <div id="chatbox">
+                <div class="message bot-message">
+                    Hello! I'm Arogya AI, your healthcare assistant. How can I help you today?
+                </div>
+            </div>
+            <div class="input-container">
+                {% csrf_token %}
+                <input type="text" id="userInput" value="{{ query }}" placeholder="Type your message here...">
+                <button id="sendButton">
+                    <i class="fas fa-paper-plane"></i>
+                    Send
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="input-group">
-        {% csrf_token %}
-        <input type="text" id="userInput" value="{{ query }}" placeholder="Type your message here">
-        <button id="sendButton">Send</button>
-    </div>
-</div>
 
-<script>
-    const chatbox = document.getElementById('chatbox');
-    const userInput = document.getElementById('userInput');
-    const sendButton = document.getElementById('sendButton');
+    <script>
+        const chatbox = document.getElementById('chatbox');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
 
-    // Dynamic background color based on time of day
-    const hour = new Date().getHours();
-    if (hour >= 6 && hour < 12) {
-        document.body.style.background = "linear-gradient(135deg, #f3eac2, #f9d976)"; // Morning
-    } else if (hour >= 12 && hour < 18) {
-        document.body.style.background = "linear-gradient(135deg, #fbc2eb, #a18cd1)"; // Afternoon
-    } else {
-        document.body.style.background = "linear-gradient(135deg, #283048, #859398)"; // Evening/Night
-    }
+        // Dynamic background color based on time of day
+        const hour = new Date().getHours();
+        if (hour >= 6 && hour < 12) {
+            document.body.style.background = "linear-gradient(135deg, #f3eac2, #f9d976)"; // Morning
+        } else if (hour >= 12 && hour < 18) {
+            document.body.style.background = "linear-gradient(135deg, #fbc2eb, #a18cd1)"; // Afternoon
+        } else {
+            document.body.style.background = "linear-gradient(135deg, #283048, #859398)"; // Evening/Night
+        }
 
-    sendButton.addEventListener('click', sendMessage);
-
-    function appendMessage(message, isUser) {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message', isUser ? 'user-message' : 'bot-message');
-        messageDiv.innerHTML = message; // Parse response as HTML
-        chatbox.appendChild(messageDiv);
-        chatbox.scrollTop = chatbox.scrollHeight; // Auto-scroll to the bottom
-    }
-
-    function sendMessage() {
-        const message = userInput.value.trim();
-        if (!message) return;
-
-        // Display user message
-        appendMessage(message, true);
-        userInput.value = '';
-
-        // Send message to the backend
-        fetch(`{% url 'chat' %}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCSRFToken() // For Django CSRF protection
-            },
-            body: JSON.stringify({ message })
-        })
-        .then(response => response.json())
-        .then(data => {
-            const parsedResponse = parseReadmeToHTML(data.response); // Parse response to HTML
-            appendMessage(parsedResponse, false);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            appendMessage('<i>Error: Unable to connect to the server.</i>', false);
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
         });
-    }
 
-    function getCSRFToken() {
-       return document.getElementsByName('csrfmiddlewaretoken')[0].value;
-    }
+        function appendMessage(message, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', isUser ? 'user-message' : 'bot-message');
+            messageDiv.innerHTML = parseReadmeToHTML(message);
+            chatbox.appendChild(messageDiv);
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
 
-    // Function to parse readme-like response to HTML
-    function parseReadmeToHTML(text) {
-        return text
-            .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-            .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-            .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-            .replace(/\*\*(.*)\*\*/gim, '<b>$1</b>')
-            .replace(/\*(.*)\*/gim, '<i>$1</i>')
-            .replace(/`([^`]+)`/gim, '<code>$1</code>')
-            .replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2" target="_blank">$1</a>')
-            .replace(/\n/gim, '<br>');
-    }
-</script>
+        function showTypingIndicator() {
+            const indicator = document.createElement('div');
+            indicator.classList.add('typing-indicator');
+            indicator.innerHTML = '<span></span><span></span><span></span>';
+            indicator.id = 'typingIndicator';
+            chatbox.appendChild(indicator);
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            // Display user message
+            appendMessage(message, true);
+            userInput.value = '';
+            showTypingIndicator();
+
+            // Send message to the backend
+            fetch({% url 'chat' %}, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken()
+                },
+                body: JSON.stringify({ message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                removeTypingIndicator();
+                appendMessage(data.response, false);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                removeTypingIndicator();
+                appendMessage('<i>Error: Unable to connect to the server.</i>', false);
+            });
+        }
+
+        function getCSRFToken() {
+            return document.getElementsByName('csrfmiddlewaretoken')[0].value;
+        }
+
+        function parseReadmeToHTML(text) {
+            return text
+                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                .replace(/\*\*(.*)\*\*/gim, '<b>$1</b>')
+                .replace(/\*(.*)\*/gim, '<i>$1</i>')
+                .replace(/([^]+)/gim, '<code>$1</code>')
+                .replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2" target="_blank">$1</a>')
+                .replace(/\n/gim, '<br>');
+        }
+
+        // Focus input on page load
+        userInput.focus();
+    </script>
 </body>
 </html>
+
+

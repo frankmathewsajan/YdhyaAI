@@ -89,6 +89,7 @@ def chat(request):
         try:
             data = json.loads(request.body)
             user_message = data.get('message', '')
+            print(user_message)
 
             # Generate a response
             bot_response = get_response(50, user_message)
@@ -96,6 +97,7 @@ def chat(request):
             return JsonResponse({"response": bot_response})
         except Exception as e:
             # Convert exception to a string for JSON serialization
+            print(e)
             return JsonResponse({"response": str(e)}, status=500)
 
 
