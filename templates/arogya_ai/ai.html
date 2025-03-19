@@ -98,7 +98,7 @@
     </div>
     <div class="input-group">
         {% csrf_token %}
-        <input type="text" id="userInput" placeholder="Type your message here">
+        <input type="text" id="userInput" value="{{ query }}" placeholder="Type your message here">
         <button id="sendButton">Send</button>
     </div>
 </div>
